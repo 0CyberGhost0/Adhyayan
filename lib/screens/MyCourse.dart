@@ -13,33 +13,7 @@ class MyCoursePage extends StatefulWidget {
 }
 
 class _MyCoursePageState extends State<MyCoursePage> {
-  final List<Course> courses = [
-    Course(
-      id: "1",
-      title: "Create 3D With Blender",
-      description: "Learn the basics of 3D design with Blender.",
-      instructor: "John Doe",
-      price: 400,
-      rating: 4.5,
-      enrolledCount: 150,
-      thumbnailUrl: "assets/images/blender.jpg",
-      category: "DESIGN",
-      lessons: ["Introduction", "Modeling", "Texturing", "Rendering"],
-    ),
-    Course(
-      id: "2",
-      title: "Mastering Flutter",
-      description: "Master Flutter for building cross-platform apps.",
-      instructor: "Jane Smith",
-      price: 500,
-      rating: 4.8,
-      enrolledCount: 200,
-      thumbnailUrl: "assets/images/flutter.jpg",
-      category: "DEVELOPMENT",
-      lessons: ["Setup", "Widgets", "State Management", "Deployment"],
-    ),
-  ];
-
+  List<Course> myCourses = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,7 +90,7 @@ class _MyCoursePageState extends State<MyCoursePage> {
               ),
               const SizedBox(height: 20),
               // Display "Search Course" when there are no courses
-              if (courses.isEmpty)
+              if (myCourses.isEmpty)
                 Expanded(
                   child: Center(
                     child: Column(
@@ -144,9 +118,9 @@ class _MyCoursePageState extends State<MyCoursePage> {
               else
                 Expanded(
                   child: ListView.builder(
-                    itemCount: 10,
+                    itemCount: myCourses.length,
                     itemBuilder: (context, index) {
-                      final course = courses[0];
+                      final course = myCourses[index];
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 16.0),
                         child: Container(
@@ -156,6 +130,7 @@ class _MyCoursePageState extends State<MyCoursePage> {
                           ), // Add margin to prevent shadow cutoff
                           child: ContinueLearningCard(
                             course: course,
+                            lessonsCompleted: 2,
                           ),
                         ),
                       );

@@ -3,6 +3,7 @@ import 'package:adhyayan/provider/userProvider.dart';
 import 'package:adhyayan/screens/auth/loginScreen.dart';
 
 import 'package:adhyayan/screens/auth/signupScreen.dart';
+import 'package:adhyayan/screens/home/HomePage.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
           labelMedium: TextStyle(fontFamily: 'Poppins'),
         ),
       ),
-      home: const LoginScreen(),
+      home: BottomNavigation(),
     );
   }
 }

@@ -5,17 +5,25 @@ import '../Data_Models/courseModel.dart';
 
 class ContinueLearningCard extends StatelessWidget {
   final Course course;
-  const ContinueLearningCard({super.key, required this.course});
+  final int lessonsCompleted;
+  const ContinueLearningCard(
+      {super.key, required this.course, required this.lessonsCompleted});
 
   @override
   Widget build(BuildContext context) {
     // Example progress value, replace with actual calculation
-    double progress = 0.72;
+    double progress = (lessonsCompleted / (course.lessons.length));
 
     return GestureDetector(
       onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => CourseDetailScreen()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CourseDetailScreen(
+              course: course,
+            ),
+          ),
+        );
       },
       child: Container(
         padding: const EdgeInsets.all(16),
@@ -45,28 +53,28 @@ class ContinueLearningCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 20),
-            const Expanded(
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "DESIGN",
+                    course.category.toUpperCase(),
                     style: TextStyle(
                         color: categoryFontColor, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 4,
                   ),
                   Text(
-                    'UI/UX Design',
-                    style: TextStyle(
+                    course.title,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
                   ),
-                  SizedBox(height: 4),
-                  Text('12/16 Lessons',
+                  const SizedBox(height: 4),
+                  Text('2/${course.lessons.length} Lessons',
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 14,

@@ -2,14 +2,14 @@ import 'package:adhyayan/commons/color.dart';
 import 'package:adhyayan/widgets/courseLessonList.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../Data_Models/courseModel.dart';
 import '../../widgets/EnrollButton.dart';
 import '../../widgets/mentorCard.dart';
 
 class CourseDetailScreen extends StatefulWidget {
-  final bool isEnrolled =
-      false; // Add this parameter to handle enrollment status
+  final Course course; // Pass the course object to the screen
 
-  const CourseDetailScreen({super.key});
+  const CourseDetailScreen({super.key, required this.course});
 
   @override
   _CourseDetailScreenState createState() => _CourseDetailScreenState();
@@ -37,7 +37,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
         title: Align(
           alignment: Alignment.center,
           child: Text(
-            'Mastering Illustration',
+            widget.course.title, // Display the course title
             style: GoogleFonts.poppins(
               fontWeight: FontWeight.bold,
               color: Colors.black,
@@ -59,8 +59,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                     height: 200,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
-                      image: const DecorationImage(
-                        image: AssetImage('assets/images/uiux.png'),
+                      image: DecorationImage(
+                        image: NetworkImage(
+                            widget.course.thumbnailUrl), // Course thumbnail
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -69,18 +70,21 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                   Padding(
                     padding: const EdgeInsets.only(left: 16),
                     child: Text(
-                      'Mentor',
+                      'Instructor',
                       style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                          fontSize: 20),
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
                     ),
                   ),
-                  const MentorCard(
-                    mentorName: 'Simon Simorangkir',
-                    mentorTitle: 'Mentor • Illustrator at Google',
-                    mentorImage: 'assets/images/mentor.png',
-                    rating: 4.9,
+                  MentorCard(
+                    mentorName: widget.course.instructor,
+                    mentorTitle:
+                        'Instructor • ${widget.course.category}', // Use course category
+                    mentorImage:
+                        'assets/images/mentor.png', // Keep the mentor image as it is
+                    rating: widget.course.rating,
                   ),
                   const SizedBox(height: 3),
                 ],
@@ -119,7 +123,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    'Course (25)',
+                                    'Course (${widget.course.lessons.length})',
                                     style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.bold,
                                       color: isCourseSelected
@@ -169,9 +173,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const Text(
-                    '25 Lessons • 72 Hours',
-                    style: TextStyle(
+                  Text(
+                    '${widget.course.lessons.length} Lessons • ${widget.course.enrolledCount} Enrolled',
+                    style: const TextStyle(
                       fontSize: 14,
                       color: Colors.grey,
                     ),
@@ -184,18 +188,17 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
           SliverToBoxAdapter(
             child: isCourseSelected
                 ? ListView.builder(
-                    shrinkWrap: true, // Allows the ListView to wrap its content
+                    shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: 20,
+                    itemCount: widget.course.lessons.length,
                     itemBuilder: (context, index) {
-                      // Set isEnrolled true for the first item, otherwise false
-                      bool isEnrolled = index == 0 ? true : false;
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: CourseListItem(
-                          title: 'Introduction',
-                          duration: '20 min',
-                          isEnrolled: isEnrolled,
+                          title: widget.course.lessons[index].title,
+                          duration:
+                              'Duration Info', // Replace with actual duration if available
+                          isEnrolled: false,
                         ),
                       );
                     },
@@ -203,14 +206,14 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                 : Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      'This course on mastering illustration provides comprehensive training in the principles and techniques of digital and traditional illustration. Whether you’re a beginner or an experienced artist, this course is designed to help you refine your skills, understand key design concepts, and explore various styles and mediums. You’ll learn how to create stunning illustrations from concept to final piece, using tools like Adobe Illustrator, Photoshop, and Procreate. The course also covers important topics such as color theory, composition, and the creative process. With practical assignments and expert guidance, you’ll build a portfolio that showcases your unique artistic voice. This course is ideal for aspiring illustrators, graphic designers, and anyone interested in the visual arts.',
+                      widget.course.description,
                       style: GoogleFonts.poppins(fontSize: 18),
                     ),
                   ),
           ),
         ],
       ),
-      bottomNavigationBar: widget.isEnrolled ? null : EnrollButton(),
+      bottomNavigationBar: false ? null : EnrollButton(),
     );
   }
 }

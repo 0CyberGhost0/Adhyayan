@@ -1,6 +1,7 @@
 import 'package:adhyayan/Data_Models/courseModel.dart';
 import 'package:adhyayan/commons/color.dart';
 import 'package:adhyayan/screens/home/searchScreen.dart';
+import 'package:adhyayan/services/CourseServices.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -8,19 +9,35 @@ import '../../widgets/categoryIcon.dart';
 import '../../widgets/continueLearningCard.dart';
 import '../../widgets/popularCourse.dart';
 
-class HomePage extends StatelessWidget {
-  final Course temp = Course(
-    price: 400,
-    title: 'UI/UX Design',
-    description: 'Intereseting Course',
-    instructor: 'Ved',
-    rating: 4.7,
-    enrolledCount: 1234,
-    thumbnailUrl: 'www.google.com',
-    category: "Design",
-    lessons: ["Introduction", "Beginner", "Advanced"],
-    id: 'sda',
-  );
+class HomePage extends StatefulWidget {
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final tempCourse = Course.sample();
+  final List<Course> enrolledCourses = [];
+  List<Course> popularCourses = []; // Initialize as empty list
+
+  @override
+  void initState() {
+    super.initState();
+    getPopularCourse(); // Fetch popular courses when the widget is initialized
+  }
+
+  Future<void> getPopularCourse() async {
+    try {
+      CourseServices _courseService = CourseServices();
+      // Fetch popular courses from the service
+      final fetchedCourses = await _courseService.getPopularCourse();
+      setState(() {
+        popularCourses =
+            fetchedCourses; // Update the state with the fetched courses
+      });
+    } catch (error) {
+      print('Failed to fetch popular courses: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,9 +77,7 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 5,
-            ),
+            SizedBox(height: 5),
             // Search Bar
             GestureDetector(
               onTap: () {
@@ -81,10 +96,10 @@ class HomePage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1), // Shadow color
-                      spreadRadius: 2, // Spread radius
-                      blurRadius: 8, // Blur radius
-                      offset: const Offset(0, 4), // Offset in x and y direction
+                      color: Colors.black.withOpacity(0.1),
+                      spreadRadius: 2,
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
                     ),
                   ],
                 ),
@@ -110,7 +125,6 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-
             const SizedBox(height: 22),
             // Category Icons
             const Row(
@@ -124,7 +138,6 @@ class HomePage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 22),
-
             // Continue Learning
             Text(
               "Continue Learning",
@@ -135,11 +148,10 @@ class HomePage extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             ContinueLearningCard(
-              course: temp,
+              course: tempCourse,
+              lessonsCompleted: 2,
             ),
-
             SizedBox(height: 24),
-
             // Popular Course
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -152,7 +164,9 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    // Handle 'View All' action
+                  },
                   child: Text(
                     'View All',
                     style: GoogleFonts.poppins(
@@ -165,11 +179,14 @@ class HomePage extends StatelessWidget {
               ],
             ),
             SizedBox(height: 16),
-            PopularCourseCard(),
-            SizedBox(
-              height: 13,
-            ),
-            PopularCourseCard(),
+            // Display the list of popular courses
+            for (var course in popularCourses)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: PopularCourseCard(
+                  course: course,
+                ),
+              ),
           ],
         ),
       ),

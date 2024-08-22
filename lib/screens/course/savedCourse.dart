@@ -13,33 +13,7 @@ class SavedCourse extends StatefulWidget {
 }
 
 class _SavedCourseState extends State<SavedCourse> {
-  final List<Course> courses = [
-    // Sample courses
-    Course(
-      id: "1",
-      title: "Create 3D With Blender",
-      description: "Learn the basics of 3D design with Blender.",
-      instructor: "John Doe",
-      price: 400,
-      rating: 4.5,
-      enrolledCount: 150,
-      thumbnailUrl: "assets/images/blender.jpg",
-      category: "DESIGN",
-      lessons: ["Introduction", "Modeling", "Texturing", "Rendering"],
-    ),
-    Course(
-      id: "2",
-      title: "Mastering Flutter",
-      description: "Master Flutter for building cross-platform apps.",
-      instructor: "Jane Smith",
-      price: 500,
-      rating: 4.8,
-      enrolledCount: 200,
-      thumbnailUrl: "assets/images/flutter.jpg",
-      category: "DEVELOPMENT",
-      lessons: ["Setup", "Widgets", "State Management", "Deployment"],
-    ),
-  ];
+  final List<Course> savedCourses = [];
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +98,7 @@ class _SavedCourseState extends State<SavedCourse> {
               const SizedBox(height: 20),
 
               // Display "Search Course" when there are no courses
-              if (courses.isEmpty)
+              if (savedCourses.isEmpty)
                 Expanded(
                   child: Center(
                     child: Column(
@@ -159,7 +133,7 @@ class _SavedCourseState extends State<SavedCourse> {
                           horizontal: 14.0,
                           vertical: 10.0,
                         ), // Add margin to prevent shadow cutoff
-                        child: const PopularCourseCard(),
+                        child: PopularCourseCard(course: savedCourses[index]),
                       );
                     },
                   ),

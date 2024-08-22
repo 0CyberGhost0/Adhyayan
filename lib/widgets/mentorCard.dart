@@ -1,6 +1,7 @@
 import 'package:adhyayan/commons/color.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 
 class MentorCard extends StatelessWidget {
   final String mentorName;
@@ -50,10 +51,13 @@ class MentorCard extends StatelessWidget {
             ),
             Row(
               children: [
-                const Icon(
-                  Icons.star,
+                Icon(
+                  Iconsax.star1,
                   color: Colors.amber,
                   size: 20,
+                ),
+                SizedBox(
+                  width: 4,
                 ),
                 Text(
                   rating.toString(),

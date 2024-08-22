@@ -1,6 +1,6 @@
 const express=require("express");
 const cors=require("cors");
-
+const courseRoutes=require("./routes/course");
 const app=express();
 app.use(cors());
 const connectDB=require("./db");
@@ -13,6 +13,8 @@ app.get("/",async(req,res)=>{
     res.json({"msg":"Hello World"});
 });
 app.use("/auth",authRoutes);
+app.use("/course",courseRoutes);
+
 app.listen(PORT,async(req,res)=>{
     console.log(`Listening on Port ${PORT}`);
 });

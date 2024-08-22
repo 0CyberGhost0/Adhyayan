@@ -139,9 +139,11 @@ class _SearchScreenState extends State<SearchScreen> {
                   child: ListView.builder(
                     itemCount: searchResults.length,
                     itemBuilder: (context, index) {
-                      return const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8.0),
-                        child: PopularCourseCard(),
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: PopularCourseCard(
+                          course: searchResults[0],
+                        ),
                       );
                     },
                   ),

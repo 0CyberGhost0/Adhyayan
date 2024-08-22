@@ -1,9 +1,16 @@
 import 'package:adhyayan/commons/color.dart';
+// Import your Course model
 import 'package:adhyayan/screens/course/courseDetailScreen.dart';
 import 'package:flutter/material.dart';
+import '../Data_Models/courseModel.dart';
 
 class PopularCourseCard extends StatelessWidget {
-  const PopularCourseCard({super.key});
+  final Course course;
+
+  const PopularCourseCard({
+    super.key,
+    required this.course,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +19,7 @@ class PopularCourseCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CourseDetailScreen(),
+            builder: (context) => CourseDetailScreen(course: course),
           ),
         );
       },
@@ -43,8 +50,8 @@ class PopularCourseCard extends StatelessWidget {
                   height: 160,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    image: const DecorationImage(
-                      image: AssetImage('assets/images/blender.jpg'),
+                    image: DecorationImage(
+                      image: NetworkImage(course.thumbnailUrl),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -60,7 +67,7 @@ class PopularCourseCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      '\$400',
+                      '\$${course.price.toStringAsFixed(2)}',
                       style: TextStyle(
                         color: progressIndicatorColor,
                         fontWeight: FontWeight.bold,
@@ -82,7 +89,7 @@ class PopularCourseCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'DESIGN',
+                        course.category.toUpperCase(),
                         style: TextStyle(
                           color: progressIndicatorColor,
                           fontWeight: FontWeight.bold,
@@ -91,7 +98,7 @@ class PopularCourseCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Create 3D With Blender',
+                        course.title,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
@@ -102,7 +109,7 @@ class PopularCourseCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '16 Lessons  •  48 Hours',
+                        '${course.lessons.length} Lessons  •  Approx ${course.lessons.length * 3} Hours', // Example logic for duration
                         style: TextStyle(
                           color: Colors.grey[600],
                           fontSize: 14,
@@ -117,7 +124,6 @@ class PopularCourseCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: categoryBoxColor,
                     shape: BoxShape.circle, // Background color for the image
-                    // borderRadius: BorderRadius.circular(8),
                   ),
                   child: Image.asset(
                     'assets/images/bookmark2.png',

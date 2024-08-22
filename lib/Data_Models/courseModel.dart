@@ -1,3 +1,27 @@
+class Lesson {
+  final String title;
+  final String content;
+
+  Lesson({
+    required this.title,
+    required this.content,
+  });
+
+  factory Lesson.fromJson(Map<String, dynamic> json) {
+    return Lesson(
+      title: json['title'],
+      content: json['content'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'content': content,
+    };
+  }
+}
+
 class Course {
   String? id;
   final String title;
@@ -8,10 +32,10 @@ class Course {
   final int enrolledCount;
   final String thumbnailUrl;
   final String category;
-  final List<String> lessons;
+  final List<Lesson> lessons;
 
   Course({
-    required this.id,
+    this.id,
     required this.title,
     required this.description,
     required this.instructor,
@@ -22,8 +46,40 @@ class Course {
     required this.category,
     required this.lessons,
   });
+  factory Course.sample() {
+    final lessons = [
+      Lesson(
+        title: "Introduction to Dart",
+        content:
+            "This lesson covers the basics of the Dart programming language, including its syntax, variables, and basic data structures.",
+      ),
+      Lesson(
+        title: "Flutter Widgets",
+        content:
+            "Learn about the core widgets in Flutter and how to use them to build user interfaces.",
+      ),
+      Lesson(
+        title: "State Management",
+        content:
+            "Understand different state management approaches in Flutter, including Provider, Riverpod, and Bloc.",
+      ),
+    ];
 
-  // Factory constructor for creating a Course instance from JSON
+    return Course(
+      id: "1234567890",
+      title: "Mastering Flutter Development",
+      description:
+          "This comprehensive course takes you from beginner to advanced in Flutter development. You'll learn everything from basic Dart programming to complex state management and custom widgets.",
+      instructor: "Ved Prakash",
+      price: 99.99,
+      rating: 4.8,
+      enrolledCount: 250,
+      thumbnailUrl:
+          "https://res.cloudinary.com/dxa9xqx3t/image/upload/v1724362040/courseImage/nxwwl7tycp25ttqzoz6s.png",
+      category: "Design",
+      lessons: lessons,
+    );
+  }
   factory Course.fromJson(Map<String, dynamic> json) {
     return Course(
       id: json['_id'],
@@ -35,11 +91,12 @@ class Course {
       enrolledCount: json['enrolledCount'],
       thumbnailUrl: json['thumbnailUrl'],
       category: json['category'],
-      lessons: List<String>.from(json['lessons']),
+      lessons: (json['lessons'] as List)
+          .map((lessonJson) => Lesson.fromJson(lessonJson))
+          .toList(),
     );
   }
 
-  // Method for converting Course instance to JSON
   Map<String, dynamic> toJson() {
     return {
       '_id': id,
@@ -51,7 +108,7 @@ class Course {
       'enrolledCount': enrolledCount,
       'thumbnailUrl': thumbnailUrl,
       'category': category,
-      'lessons': lessons,
+      'lessons': lessons.map((lesson) => lesson.toJson()).toList(),
     };
   }
 }

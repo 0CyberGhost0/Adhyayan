@@ -1,5 +1,6 @@
 const express=require("express");
 const Course=require("../models/courseModel");
+const authMiddleware=require("../routes/middleware/authMiddleware");
 const courseRouter=express();
 courseRouter.get("/popularCourse", async (req, res) => {
     try {
@@ -27,5 +28,20 @@ courseRouter.get("/category/:categoryType", async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
+});
+courseRouter.post("/saveCourse",authMiddleware,async(req,res)=>{
+    try{
+        const userId=req.userId;
+        const {courseId}=req.body;
+        console.log("USER ID");
+
+        console.log(userId);
+        console.log("COURSE ID");
+        console.log(courseId);
+
+    }catch(err){
+        res.status(500).json({error:err.message});
+    }
+
 });
 module.exports=courseRouter;

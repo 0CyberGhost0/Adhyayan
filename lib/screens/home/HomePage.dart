@@ -4,6 +4,7 @@ import 'package:adhyayan/screens/home/searchScreen.dart';
 import 'package:adhyayan/services/CourseServices.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../widgets/categoryIcon.dart';
 import '../../widgets/continueLearningCard.dart';
@@ -17,25 +18,28 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final tempCourse = Course.sample();
   final List<Course> enrolledCourses = [];
-  List<Course> popularCourses = []; // Initialize as empty list
+  List<Course> popularCourses = [];
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    getPopularCourse(); // Fetch popular courses when the widget is initialized
+    getPopularCourse();
   }
 
   Future<void> getPopularCourse() async {
     try {
       CourseServices _courseService = CourseServices();
-      // Fetch popular courses from the service
       final fetchedCourses = await _courseService.getPopularCourse();
       setState(() {
-        popularCourses =
-            fetchedCourses; // Update the state with the fetched courses
+        popularCourses = fetchedCourses;
+        isLoading = false;
       });
     } catch (error) {
       print('Failed to fetch popular courses: $error');
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -78,7 +82,6 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 5),
-            // Search Bar
             GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -117,8 +120,7 @@ class _HomePageState extends State<HomePage> {
                           hintText: 'What do you want to learn today?',
                           border: InputBorder.none,
                         ),
-                        enabled:
-                            false, // Disable text input to keep it tappable only
+                        enabled: false,
                       ),
                     ),
                   ],
@@ -126,7 +128,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(height: 22),
-            // Category Icons
             const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -138,7 +139,6 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             const SizedBox(height: 22),
-            // Continue Learning
             Text(
               "Continue Learning",
               style: GoogleFonts.poppins(
@@ -152,7 +152,6 @@ class _HomePageState extends State<HomePage> {
               lessonsCompleted: 2,
             ),
             SizedBox(height: 24),
-            // Popular Course
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -179,16 +178,54 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             SizedBox(height: 16),
-            // Display the list of popular courses
-            for (var course in popularCourses)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
-                child: PopularCourseCard(
-                  course: course,
-                ),
-              ),
+            isLoading
+                ? ShimmerSkelton()
+                : ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: popularCourses.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16.0),
+                        child: PopularCourseCard(
+                          course: popularCourses[index],
+                        ),
+                      );
+                    },
+                  ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class ShimmerSkelton extends StatelessWidget {
+  const ShimmerSkelton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: 3,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: Container(
+              height: 100,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

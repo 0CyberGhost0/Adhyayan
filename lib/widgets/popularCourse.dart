@@ -1,6 +1,8 @@
 import 'package:adhyayan/commons/color.dart';
 // Import your Course model
 import 'package:adhyayan/screens/course/courseDetailScreen.dart';
+import 'package:adhyayan/services/AuthService.dart';
+import 'package:adhyayan/services/CourseServices.dart';
 import 'package:flutter/material.dart';
 import '../Data_Models/courseModel.dart';
 
@@ -11,6 +13,10 @@ class PopularCourseCard extends StatelessWidget {
     super.key,
     required this.course,
   });
+  void saveCourse(String courseId) {
+    CourseServices courseService = CourseServices();
+    courseService.saveCourse(courseId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,16 +125,21 @@ class PopularCourseCard extends StatelessWidget {
                   ),
                 ),
                 // Bookmark Image inside a Container
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: categoryBoxColor,
-                    shape: BoxShape.circle, // Background color for the image
-                  ),
-                  child: Image.asset(
-                    'assets/images/bookmark2.png',
-                    width: 20, // Adjust width if needed
-                    height: 20, // Adjust height if needed
+                GestureDetector(
+                  onTap: () {
+                    saveCourse(course.id!);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: categoryBoxColor,
+                      shape: BoxShape.circle, // Background color for the image
+                    ),
+                    child: Image.asset(
+                      'assets/images/bookmark2.png',
+                      width: 20, // Adjust width if needed
+                      height: 20, // Adjust height if needed
+                    ),
                   ),
                 ),
               ],

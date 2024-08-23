@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
           labelMedium: TextStyle(fontFamily: 'Poppins'),
         ),
       ),
-      home: BottomNavigation(),
+      home: LoginScreen(),
     );
   }
 }

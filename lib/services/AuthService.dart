@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:adhyayan/bottom_navigation.dart';
 import 'package:adhyayan/commons/constants.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
@@ -67,6 +68,8 @@ class AuthService {
         sharedPreferences.setString(
             "x-auth-token", jsonDecode(res.body)['token']);
         getUserData(context: context);
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => BottomNavigation()));
       }
       print(res.statusCode);
     } catch (err) {

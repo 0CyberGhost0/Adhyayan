@@ -1,11 +1,19 @@
+import 'package:adhyayan/services/CourseServices.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../commons/color.dart';
 
-class EnrollButton extends StatelessWidget {
-  const EnrollButton({super.key});
+class EnrollButton extends StatefulWidget {
+  final String courseID;
+  final VoidCallback onTap;
+  const EnrollButton({super.key, required this.courseID, required this.onTap});
 
+  @override
+  State<EnrollButton> createState() => _EnrollButtonState();
+}
+
+class _EnrollButtonState extends State<EnrollButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -15,9 +23,7 @@ class EnrollButton extends StatelessWidget {
         right: 18,
       ),
       child: ElevatedButton(
-        onPressed: () {
-          // Handle enroll button press
-        },
+        onPressed: widget.onTap,
         style: ElevatedButton.styleFrom(
           backgroundColor: buttonColour,
           padding: const EdgeInsets.symmetric(vertical: 16),

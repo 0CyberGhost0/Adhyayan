@@ -1,9 +1,16 @@
-import 'package:adhyayan/commons/color.dart';
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
-import '../Data_Models/courseModel.dart';
-import '../widgets/continueLearningCard.dart';
+import '../../Data_Models/courseModel.dart';
+import '../../Data_Models/userModel.dart';
+import '../../commons/color.dart';
+import '../../provider/userProvider.dart';
+import '../../services/CourseServices.dart';
+import '../../widgets/continueLearningCard.dart';
+import '../../widgets/continueLearningShimmer.dart';
 
 class MyCoursePage extends StatefulWidget {
   const MyCoursePage({super.key});
@@ -13,7 +20,37 @@ class MyCoursePage extends StatefulWidget {
 }
 
 class _MyCoursePageState extends State<MyCoursePage> {
-  List<Course> myCourses = [];
+  LinkedHashMap<Course, int> myCourses = LinkedHashMap<Course, int>();
+  bool isLoading = true; // Add a loading state
+
+  @override
+  void initState() {
+    super.initState();
+    fetchMyCourses();
+  }
+
+  void fetchMyCourses() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    List<EnrolledCourse> enrolledCourses = userProvider.user.enrolledCourses;
+    enrolledCourses.reversed;
+    for (EnrolledCourse enrolledCourse in enrolledCourses) {
+      String courseId = enrolledCourse.courseId;
+      CourseServices courseServices = CourseServices();
+      Course? course = await courseServices.getCourseById(courseId);
+      myCourses.remove(course); // Ensure no duplicates
+      myCourses[course] = enrolledCourse.completedLessonNo;
+      myCourses = LinkedHashMap<Course, int>.fromEntries(
+        [
+          MapEntry(course, enrolledCourse.completedLessonNo),
+          ...myCourses.entries
+        ],
+      );
+    }
+    setState(() {
+      isLoading = false; // Update the loading state
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,7 +127,19 @@ class _MyCoursePageState extends State<MyCoursePage> {
               ),
               const SizedBox(height: 20),
               // Display "Search Course" when there are no courses
-              if (myCourses.isEmpty)
+              if (isLoading) // Show shimmer when loading
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: 5, // Example shimmer items
+                    itemBuilder: (context, index) {
+                      return const Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: ContinueLearningCardShimmer(),
+                      );
+                    },
+                  ),
+                )
+              else if (myCourses.isEmpty)
                 Expanded(
                   child: Center(
                     child: Column(
@@ -120,7 +169,10 @@ class _MyCoursePageState extends State<MyCoursePage> {
                   child: ListView.builder(
                     itemCount: myCourses.length,
                     itemBuilder: (context, index) {
-                      final course = myCourses[index];
+                      // Get the course and completed lessons from the map
+                      final course = myCourses.keys.elementAt(index);
+                      final lessonsCompleted = myCourses[course] ?? 0;
+
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 16.0),
                         child: Container(
@@ -130,7 +182,7 @@ class _MyCoursePageState extends State<MyCoursePage> {
                           ), // Add margin to prevent shadow cutoff
                           child: ContinueLearningCard(
                             course: course,
-                            lessonsCompleted: 2,
+                            lessonsCompleted: lessonsCompleted,
                           ),
                         ),
                       );

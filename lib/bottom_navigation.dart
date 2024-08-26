@@ -1,5 +1,5 @@
 import 'package:adhyayan/commons/color.dart';
-import 'package:adhyayan/screens/MyCourse.dart';
+import 'package:adhyayan/screens/course/MyCourse.dart';
 import 'package:adhyayan/screens/course/savedCourse.dart';
 import 'package:adhyayan/screens/home/HomePage.dart';
 import 'package:flutter/cupertino.dart';

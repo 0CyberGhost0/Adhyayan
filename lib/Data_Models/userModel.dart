@@ -83,7 +83,10 @@ class User {
         (map['enrolledCourses'] ?? [])
             .map((course) => EnrolledCourse.fromMap(course)),
       ),
-      savedCourses: List<String>.from(map['savedCourses'] ?? []),
+      savedCourses: List<String>.from(
+        (map['savedCourses'] ?? [])
+            .map((course) => course['courseId'] as String),
+      ),
       userName: map['userName'] ?? '',
     );
   }

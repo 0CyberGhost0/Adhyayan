@@ -1,9 +1,13 @@
 import 'package:adhyayan/commons/color.dart';
+import 'package:adhyayan/provider/userProvider.dart';
+import 'package:adhyayan/widgets/PopularCardShimmer.dart';
 import 'package:adhyayan/widgets/popularCourse.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+// Import the shimmer effect
 import '../../Data_Models/courseModel.dart';
-import '../../Data_Models/courseModel.dart';
+import '../../services/CourseServices.dart';
 
 class SavedCourse extends StatefulWidget {
   const SavedCourse({super.key});
@@ -13,7 +17,40 @@ class SavedCourse extends StatefulWidget {
 }
 
 class _SavedCourseState extends State<SavedCourse> {
-  final List<Course> savedCourses = [];
+  List<Course> savedCourses = [];
+  bool isLoading = true; // To manage loading state
+
+  @override
+  void initState() {
+    super.initState();
+    fetchSavedCourses();
+  }
+
+  Future<void> fetchSavedCourses() async {
+    final user = Provider.of<UserProvider>(context, listen: false).user;
+    final List<String> savedCourseIds = user.savedCourses;
+    CourseServices courseServices = CourseServices();
+
+    List<Course> fetchedCourses = [];
+    for (String courseId in savedCourseIds) {
+      try {
+        Course? course = await courseServices.getCourseById(courseId);
+        fetchedCourses.add(course);
+      } catch (e) {
+        print('Failed to fetch course with ID $courseId: $e');
+      }
+    }
+
+    setState(() {
+      savedCourses = fetchedCourses;
+      isLoading = false; // Set to false once data is loaded
+    });
+  }
+
+  void unsaveCourse(String courseId) {
+    CourseServices courseService = CourseServices();
+    courseService.unsaveCourse(courseId, context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,8 +134,22 @@ class _SavedCourseState extends State<SavedCourse> {
               ),
               const SizedBox(height: 20),
 
+              // Display the shimmer effect while loading
+              if (isLoading)
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: 2, // Show 5 shimmer placeholders
+                    itemBuilder: (context, index) {
+                      return const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child:
+                            PopularCourseCardShimmer(), // Shimmer placeholder
+                      );
+                    },
+                  ),
+                )
               // Display "Search Course" when there are no courses
-              if (savedCourses.isEmpty)
+              else if (savedCourses.isEmpty)
                 Expanded(
                   child: Center(
                     child: Column(
@@ -126,14 +177,36 @@ class _SavedCourseState extends State<SavedCourse> {
               else
                 Expanded(
                   child: ListView.builder(
-                    itemCount: 5,
+                    itemCount: savedCourses.length,
                     itemBuilder: (context, index) {
                       return Container(
                         margin: const EdgeInsets.symmetric(
                           horizontal: 14.0,
                           vertical: 10.0,
                         ), // Add margin to prevent shadow cutoff
-                        child: PopularCourseCard(course: savedCourses[index]),
+                        child: Dismissible(
+                          // Unique key based on course ID
+                          key: Key(savedCourses[index].id!),
+                          direction:
+                              DismissDirection.endToStart, // Swipe direction
+                          onDismissed: (direction) {
+                            unsaveCourse(savedCourses[index]
+                                .id!); // Call unsaveCourse function to remove the course
+                          },
+                          background: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            alignment: Alignment.centerRight,
+                            color: Colors
+                                .transparent, // Background color when swiped
+                            child: const Icon(
+                              Icons.delete,
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                          child: PopularCourseCard(
+                            course: savedCourses[index],
+                          ),
+                        ),
                       );
                     },
                   ),

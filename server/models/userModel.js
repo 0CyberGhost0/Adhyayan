@@ -44,7 +44,7 @@ const userSchema = mongoose.Schema({
     trim: true,
     default: 'https://res.cloudinary.com/dxa9xqx3t/image/upload/v1724310891/profileImage/jb2yekqpwv61rkh9wlpu.png',
   },
-  purchasedCourses: {
+  enrolledCourses: {
     type: [
       {
         courseId: {

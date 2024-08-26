@@ -25,14 +25,14 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  AuthService _authService = AuthService();
+  final AuthService _authService = AuthService();
   void _login() {
     final String email = _emailController.text;
     final String password = _passwordController.text;
     if (email.isEmpty || password.isEmpty) {
       // Added username check
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please fill all required fields')),
+        const SnackBar(content: Text('Please fill all required fields')),
       );
       return;
     }

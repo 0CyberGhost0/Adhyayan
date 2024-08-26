@@ -1,13 +1,18 @@
 import 'package:adhyayan/Data_Models/courseModel.dart';
+import 'package:adhyayan/Data_Models/userModel.dart';
 import 'package:adhyayan/commons/color.dart';
+import 'package:adhyayan/provider/userProvider.dart';
 import 'package:adhyayan/screens/home/searchScreen.dart';
 import 'package:adhyayan/services/CourseServices.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../widgets/PopularCardShimmer.dart';
 import '../../widgets/categoryIcon.dart';
 import '../../widgets/continueLearningCard.dart';
+import '../../widgets/continueLearningShimmer.dart';
 import '../../widgets/popularCourse.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,10 +21,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final tempCourse = Course.sample();
-  final List<Course> enrolledCourses = [];
+  Course recentCourse = Course(
+    title: '',
+    description: '',
+    instructor: '',
+    price: 0,
+    rating: 0,
+    enrolledCount: 0,
+    thumbnailUrl: '',
+    category: '',
+    lessons: [],
+  );
+
   List<Course> popularCourses = [];
   bool isLoading = true;
+  bool hasCourse = false;
+  int lessonCompleted = 0;
 
   @override
   void initState() {
@@ -27,10 +44,34 @@ class _HomePageState extends State<HomePage> {
     getPopularCourse();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final userProvider = Provider.of<UserProvider>(context);
+    hasCourse = userProvider.user.enrolledCourses.isNotEmpty;
+    if (hasCourse) {
+      getRecentCourse();
+    }
+  }
+
+  Future<void> getRecentCourse() async {
+    final user = Provider.of<UserProvider>(context, listen: false).user;
+    final EnrolledCourse enrolledCourse = user.enrolledCourses.first;
+    lessonCompleted = enrolledCourse.completedLessonNo;
+
+    CourseServices courseServices = CourseServices();
+    Course fetchedCourse =
+        await courseServices.getCourseById(enrolledCourse.courseId);
+
+    setState(() {
+      recentCourse = fetchedCourse;
+    });
+  }
+
   Future<void> getPopularCourse() async {
     try {
-      CourseServices _courseService = CourseServices();
-      final fetchedCourses = await _courseService.getPopularCourse();
+      CourseServices courseService = CourseServices();
+      final fetchedCourses = await courseService.getPopularCourse();
       setState(() {
         popularCourses = fetchedCourses;
         isLoading = false;
@@ -81,7 +122,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -89,7 +130,9 @@ class _HomePageState extends State<HomePage> {
                   MaterialPageRoute(
                     builder: (context) => SearchScreen(),
                   ),
-                );
+                ).then((_) {
+                  getPopularCourse(); // Refresh after returning from SearchScreen
+                });
               },
               child: Container(
                 padding:
@@ -139,19 +182,23 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             const SizedBox(height: 22),
-            Text(
-              "Continue Learning",
-              style: GoogleFonts.poppins(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+            if (hasCourse) ...[
+              Text(
+                "Continue Learning",
+                style: GoogleFonts.poppins(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            ContinueLearningCard(
-              course: tempCourse,
-              lessonsCompleted: 2,
-            ),
-            SizedBox(height: 24),
+              const SizedBox(height: 16),
+              recentCourse.title.isEmpty
+                  ? const ContinueLearningCardShimmer()
+                  : ContinueLearningCard(
+                      course: recentCourse,
+                      lessonsCompleted: lessonCompleted,
+                    ),
+              const SizedBox(height: 24),
+            ],
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -164,7 +211,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 TextButton(
                   onPressed: () {
-                    // Handle 'View All' action
+// Handle 'View All' action
                   },
                   child: Text(
                     'View All',
@@ -177,12 +224,20 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             isLoading
-                ? ShimmerSkelton()
+                ? ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: 2,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: const PopularCourseCardShimmer());
+                    })
                 : ListView.builder(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: popularCourses.length,
                     itemBuilder: (context, index) {
                       return Padding(
@@ -195,37 +250,6 @@ class _HomePageState extends State<HomePage> {
                   ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class ShimmerSkelton extends StatelessWidget {
-  const ShimmerSkelton({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: ListView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: 3,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
-            child: Container(
-              height: 100,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-          );
-        },
       ),
     );
   }

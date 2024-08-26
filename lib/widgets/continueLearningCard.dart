@@ -1,18 +1,43 @@
+import 'package:adhyayan/Data_Models/userModel.dart';
 import 'package:adhyayan/commons/color.dart';
+import 'package:adhyayan/provider/userProvider.dart';
 import 'package:adhyayan/screens/course/courseDetailScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../Data_Models/courseModel.dart';
 
-class ContinueLearningCard extends StatelessWidget {
+class ContinueLearningCard extends StatefulWidget {
   final Course course;
   final int lessonsCompleted;
+
   const ContinueLearningCard(
       {super.key, required this.course, required this.lessonsCompleted});
 
   @override
+  State<ContinueLearningCard> createState() => _ContinueLearningCardState();
+}
+
+class _ContinueLearningCardState extends State<ContinueLearningCard> {
+  @override
+  void initState() {
+    print("inside continue learning");
+    getLessonCompleted();
+    super.initState();
+  }
+
+  void getLessonCompleted() {
+    final user = Provider.of<UserProvider>(context, listen: false).user;
+    for (EnrolledCourse savedCourse in user.enrolledCourses) {
+      print(savedCourse.toJson());
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // Example progress value, replace with actual calculation
-    double progress = (lessonsCompleted / (course.lessons.length));
+    double progress = 0;
+    if (widget.course.lessons.isNotEmpty) {
+      progress = (widget.lessonsCompleted / (widget.course.lessons.length));
+    }
 
     return GestureDetector(
       onTap: () {
@@ -20,7 +45,7 @@ class ContinueLearningCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => CourseDetailScreen(
-              course: course,
+              course: widget.course,
             ),
           ),
         );
@@ -46,8 +71,8 @@ class ContinueLearningCard extends StatelessWidget {
               height: 70,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
-                image: const DecorationImage(
-                  image: AssetImage('assets/images/uiux.png'),
+                image: DecorationImage(
+                  image: NetworkImage(widget.course.thumbnailUrl),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -58,7 +83,7 @@ class ContinueLearningCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    course.category.toUpperCase(),
+                    widget.course.category.toUpperCase(),
                     style: TextStyle(
                         color: categoryFontColor, fontWeight: FontWeight.bold),
                   ),
@@ -66,7 +91,7 @@ class ContinueLearningCard extends StatelessWidget {
                     height: 4,
                   ),
                   Text(
-                    course.title,
+                    widget.course.title,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -74,11 +99,13 @@ class ContinueLearningCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Text('2/${course.lessons.length} Lessons',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                      )),
+                  Text(
+                    '${widget.lessonsCompleted}/${widget.course.lessons.length} Lessons',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 14,
+                    ),
+                  ),
                 ],
               ),
             ),

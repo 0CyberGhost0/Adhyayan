@@ -1,21 +1,57 @@
 import 'package:adhyayan/commons/color.dart';
-// Import your Course model
+import 'package:adhyayan/provider/userProvider.dart';
+
 import 'package:adhyayan/screens/course/courseDetailScreen.dart';
 import 'package:adhyayan/services/AuthService.dart';
 import 'package:adhyayan/services/CourseServices.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../Data_Models/courseModel.dart';
 
-class PopularCourseCard extends StatelessWidget {
+class PopularCourseCard extends StatefulWidget {
   final Course course;
 
   const PopularCourseCard({
     super.key,
     required this.course,
   });
-  void saveCourse(String courseId) {
+
+  @override
+  State<PopularCourseCard> createState() => _PopularCourseCardState();
+}
+
+class _PopularCourseCardState extends State<PopularCourseCard> {
+  bool isBookmarked = false;
+
+  void saveCourse() async {
     CourseServices courseService = CourseServices();
-    courseService.saveCourse(courseId);
+
+    await courseService.saveCourse(widget.course.id!, context);
+    setState(() {
+      isBookmarked = !isBookmarked;
+    });
+  }
+
+  void unsaveCourse() async {
+    CourseServices courseService = CourseServices();
+
+    await courseService.unsaveCourse(widget.course.id!, context);
+    setState(() {
+      isBookmarked = !isBookmarked;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    final user = Provider.of<UserProvider>(context, listen: false).user;
+    final String currCourseId = widget.course.id!;
+    bool flag = user.savedCourses.contains(currCourseId);
+    setState(() {
+      isBookmarked = flag;
+    });
+
+    super.initState();
   }
 
   @override
@@ -25,7 +61,7 @@ class PopularCourseCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CourseDetailScreen(course: course),
+            builder: (context) => CourseDetailScreen(course: widget.course),
           ),
         );
       },
@@ -57,7 +93,7 @@ class PopularCourseCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     image: DecorationImage(
-                      image: NetworkImage(course.thumbnailUrl),
+                      image: NetworkImage(widget.course.thumbnailUrl),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -73,7 +109,7 @@ class PopularCourseCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      '\$${course.price.toStringAsFixed(2)}',
+                      '\$${widget.course.price.toStringAsFixed(2)}',
                       style: TextStyle(
                         color: progressIndicatorColor,
                         fontWeight: FontWeight.bold,
@@ -95,7 +131,7 @@ class PopularCourseCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        course.category.toUpperCase(),
+                        widget.course.category.toUpperCase(),
                         style: TextStyle(
                           color: progressIndicatorColor,
                           fontWeight: FontWeight.bold,
@@ -104,7 +140,7 @@ class PopularCourseCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        course.title,
+                        widget.course.title,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
@@ -115,7 +151,7 @@ class PopularCourseCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '${course.lessons.length} Lessons  •  Approx ${course.lessons.length * 3} Hours', // Example logic for duration
+                        '${widget.course.lessons.length} Lessons  •  Approx ${widget.course.lessons.length * 3} Hours', // Example logic for duration
                         style: TextStyle(
                           color: Colors.grey[600],
                           fontSize: 14,
@@ -126,20 +162,24 @@ class PopularCourseCard extends StatelessWidget {
                 ),
                 // Bookmark Image inside a Container
                 GestureDetector(
-                  onTap: () {
-                    saveCourse(course.id!);
-                  },
+                  onTap: isBookmarked ? unsaveCourse : saveCourse,
                   child: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: categoryBoxColor,
                       shape: BoxShape.circle, // Background color for the image
                     ),
-                    child: Image.asset(
-                      'assets/images/bookmark2.png',
-                      width: 20, // Adjust width if needed
-                      height: 20, // Adjust height if needed
-                    ),
+                    child: isBookmarked
+                        ? Image.asset(
+                            'assets/images/bookmark2.png',
+                            width: 20, // Adjust width if needed
+                            height: 20, // Adjust height if needed
+                          )
+                        : Image.asset(
+                            'assets/images/bookmark1.png',
+                            width: 20, // Adjust width if needed
+                            height: 20, // Adjust height if needed
+                          ),
                   ),
                 ),
               ],

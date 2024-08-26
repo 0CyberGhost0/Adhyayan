@@ -1,4 +1,5 @@
 import 'package:adhyayan/Data_Models/courseModel.dart';
+import 'package:adhyayan/services/CourseServices.dart';
 import 'package:adhyayan/widgets/popularCourse.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,6 +21,29 @@ class _SearchScreenState extends State<SearchScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FocusScope.of(context).requestFocus(_searchFocusNode);
     });
+  }
+
+  // Search course method
+  void _searchCourse() async {
+    String query = _searchController.text;
+    if (query.isNotEmpty) {
+      CourseServices courseServices = CourseServices();
+      List<Course> results = await courseServices.searchCourse(query);
+      setState(() {
+        searchResults = results;
+      });
+    } else {
+      setState(() {
+        searchResults = [];
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _searchFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -44,7 +68,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   Expanded(
                     child: TextField(
                       controller: _searchController,
-                      focusNode: _searchFocusNode, // Set the focus node here
+                      focusNode: _searchFocusNode,
                       decoration: InputDecoration(
                         hintText: "What do you want to learn today?",
                         fillColor: Colors.white,
@@ -54,8 +78,13 @@ class _SearchScreenState extends State<SearchScreen> {
                           borderSide: BorderSide.none,
                         ),
                         contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 16),
+                          horizontal: 20,
+                          vertical: 16,
+                        ),
                       ),
+                      onChanged: (value) {
+                        _searchCourse(); // Call search function on text change
+                      },
                     ),
                   ),
                 ],
@@ -83,7 +112,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 ],
               ),
               SizedBox(height: 20),
-              // Display "Search Job" when query is empty
+              // Display "Search Course" when query is empty
               if (_searchController.text.isEmpty)
                 Expanded(
                   child: Center(
@@ -108,7 +137,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                   ),
                 )
-              // Display "No Job Found" when search results are empty after searching
+              // Display "No Course Found" when search results are empty after searching
               else if (searchResults.isEmpty)
                 Expanded(
                   child: Center(
@@ -117,14 +146,14 @@ class _SearchScreenState extends State<SearchScreen> {
                       children: [
                         Image.asset(
                           "assets/images/nothing.png",
-                          width: 150,
-                          height: 150,
+                          width: 220,
+                          height: 220,
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Text(
                           "No Course Found",
                           style: GoogleFonts.poppins(
-                            fontSize: 18,
+                            fontSize: 25,
                             fontWeight: FontWeight.w500,
                             color: Colors.grey[600],
                           ),
@@ -142,7 +171,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: PopularCourseCard(
-                          course: searchResults[0],
+                          course: searchResults[
+                              index], // Display the correct course
                         ),
                       );
                     },

@@ -2,9 +2,10 @@ import 'package:adhyayan/Data_Models/courseModel.dart';
 import 'package:adhyayan/commons/color.dart';
 import 'package:adhyayan/services/CourseServices.dart';
 import 'package:adhyayan/widgets/CourseCard.dart';
+import 'package:adhyayan/widgets/CourseCardShimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../widgets/popularCourse.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CategoryScreen extends StatefulWidget {
   final String title;
@@ -20,6 +21,8 @@ class CategoryScreen extends StatefulWidget {
 
 class _CategoryScreenState extends State<CategoryScreen> {
   List<Course> categoryCourses = [];
+  bool isLoading = true;
+
   @override
   void initState() {
     super.initState();
@@ -31,6 +34,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     List<Course> course = await courseServices.getCategoryCourse(widget.title);
     setState(() {
       categoryCourses = course;
+      isLoading = false;
     });
   }
 
@@ -64,24 +68,37 @@ class _CategoryScreenState extends State<CategoryScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // Two courses per row
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            childAspectRatio: 0.7, // Adjust aspect ratio as needed
-          ),
-          itemCount: categoryCourses.length,
-          itemBuilder: (context, index) {
-            final course = categoryCourses[index];
-            return Padding(
-              padding: const EdgeInsets.all(3.0),
-              child: CourseCard(
-                course: course,
+        child: isLoading
+            ? GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // Two shimmer cards per row
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  childAspectRatio: 0.7, // Adjust aspect ratio as needed
+                ),
+                itemCount: 6, // Number of shimmer cards to display
+                itemBuilder: (context, index) {
+                  return const ShimmerCourseCard();
+                },
+              )
+            : GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // Two courses per row
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  childAspectRatio: 0.7, // Adjust aspect ratio as needed
+                ),
+                itemCount: categoryCourses.length,
+                itemBuilder: (context, index) {
+                  final course = categoryCourses[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(3.0),
+                    child: CourseCard(
+                      course: course,
+                    ),
+                  );
+                },
               ),
-            );
-          },
-        ),
       ),
     );
   }

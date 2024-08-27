@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import '../Data_Models/userModel.dart';
 
@@ -69,11 +71,43 @@ class UserProvider with ChangeNotifier {
     );
 
     if (!isCourseEnrolled) {
-      _user.enrolledCourses.insert(0, EnrolledCourse(courseId: courseId));
+      _user.enrolledCourses
+          .insert(0, EnrolledCourse(courseId: courseId, completedLessonNo: -1));
       print("Course enrolled in provider: $courseId");
       notifyListeners();
     } else {
       print("User is already enrolled in provider: $courseId");
     }
+  }
+
+  void setCompletedLessonNumber(String courseId, int completedLessonNo) {
+    print("setCompletedLessonNumber called in provider");
+
+    for (var enrolledCourse in _user.enrolledCourses) {
+      if (enrolledCourse.courseId == courseId) {
+        enrolledCourse.completedLessonNo =
+            max(completedLessonNo, enrolledCourse.completedLessonNo);
+        print("Updated completedLessonNo for course: $courseId");
+        notifyListeners();
+        return;
+      }
+    }
+
+    print("Course not found in enrolled courses: $courseId");
+  }
+
+  int getCompletedLessonNumber(String courseId) {
+    print("getCompletedLessonNumber called in provider");
+
+    for (var enrolledCourse in _user.enrolledCourses) {
+      if (enrolledCourse.courseId == courseId) {
+        print(
+            "CompletedLessonNo for course $courseId: ${enrolledCourse.completedLessonNo}");
+        return enrolledCourse.completedLessonNo;
+      }
+    }
+
+    print("Course not found in enrolled courses: $courseId");
+    return 0; // or another default value that indicates no progress
   }
 }

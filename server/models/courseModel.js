@@ -1,5 +1,21 @@
 const mongoose = require('mongoose');
-const courseSchema = mongoose.Schema({
+
+const lessonSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: true,
+    },
+    content: {
+        type: String,
+        required: true,
+    },
+    url: {
+        type: String,
+        required: true,
+    },
+});
+
+const courseSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
@@ -29,11 +45,10 @@ const courseSchema = mongoose.Schema({
     },
     category: {
         type: String,
+        enum: ['Design', 'Code', 'Business', 'Data', 'Finance'],
+        required: true,
     },
-    lessons: [{
-        title: String,
-        content: String,
-    }],
+    lessons: [lessonSchema],
 });
 
 const Course = mongoose.model("Course", courseSchema);

@@ -54,7 +54,7 @@ const userSchema = mongoose.Schema({
         },
         completedLessonNo: {
           type: Number,
-          default: 0,
+          default: -1,
         },
       },
     ],
@@ -65,6 +65,7 @@ const userSchema = mongoose.Schema({
       {
         courseId: {
           type: mongoose.Schema.Types.ObjectId,
+          unique:true,
           ref: 'Course',
           required: true,
         },

@@ -2,11 +2,11 @@ import 'dart:convert';
 
 class EnrolledCourse {
   final String courseId;
-  final int completedLessonNo;
+  int completedLessonNo;
 
   EnrolledCourse({
     required this.courseId,
-    this.completedLessonNo = 0,
+    required this.completedLessonNo,
   });
 
   Map<String, dynamic> toMap() {

@@ -36,7 +36,8 @@ class _ContinueLearningCardState extends State<ContinueLearningCard> {
   Widget build(BuildContext context) {
     double progress = 0;
     if (widget.course.lessons.isNotEmpty) {
-      progress = (widget.lessonsCompleted / (widget.course.lessons.length));
+      progress =
+          ((1 + widget.lessonsCompleted) / (widget.course.lessons.length));
     }
 
     return GestureDetector(
@@ -100,7 +101,7 @@ class _ContinueLearningCardState extends State<ContinueLearningCard> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '${widget.lessonsCompleted}/${widget.course.lessons.length} Lessons',
+                    '${widget.lessonsCompleted + 1}/${widget.course.lessons.length} Lessons',
                     style: TextStyle(
                       color: Colors.grey,
                       fontSize: 14,

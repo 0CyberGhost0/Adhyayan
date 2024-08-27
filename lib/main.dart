@@ -3,6 +3,7 @@ import 'package:adhyayan/provider/userProvider.dart';
 import 'package:adhyayan/screens/auth/loginScreen.dart';
 
 import 'package:adhyayan/screens/auth/signupScreen.dart';
+import 'package:adhyayan/screens/course/videoPlayerScreen.dart';
 import 'package:adhyayan/screens/home/HomePage.dart';
 
 import 'package:flutter/material.dart';

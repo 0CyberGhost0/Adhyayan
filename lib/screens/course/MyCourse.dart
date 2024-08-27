@@ -21,7 +21,9 @@ class MyCoursePage extends StatefulWidget {
 
 class _MyCoursePageState extends State<MyCoursePage> {
   LinkedHashMap<Course, int> myCourses = LinkedHashMap<Course, int>();
+  LinkedHashMap<Course, int> filteredCourses = LinkedHashMap<Course, int>();
   bool isLoading = true; // Add a loading state
+  String searchTerm = '';
 
   @override
   void initState() {
@@ -32,23 +34,35 @@ class _MyCoursePageState extends State<MyCoursePage> {
   void fetchMyCourses() async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     List<EnrolledCourse> enrolledCourses = userProvider.user.enrolledCourses;
-    enrolledCourses.reversed;
+
     for (EnrolledCourse enrolledCourse in enrolledCourses) {
       String courseId = enrolledCourse.courseId;
       CourseServices courseServices = CourseServices();
       Course? course = await courseServices.getCourseById(courseId);
+
       myCourses.remove(course); // Ensure no duplicates
       myCourses[course] = enrolledCourse.completedLessonNo;
-      myCourses = LinkedHashMap<Course, int>.fromEntries(
-        [
-          MapEntry(course, enrolledCourse.completedLessonNo),
-          ...myCourses.entries
-        ],
-      );
     }
+
     setState(() {
       isLoading = false; // Update the loading state
+      applySearchFilter(); // Apply search filter initially
     });
+  }
+
+  void applySearchFilter() {
+    if (searchTerm.isEmpty) {
+      setState(() {
+        filteredCourses = LinkedHashMap<Course, int>.from(myCourses);
+      });
+    } else {
+      setState(() {
+        filteredCourses = LinkedHashMap<Course, int>.fromEntries(
+          myCourses.entries.where((entry) =>
+              entry.key.title.toLowerCase().contains(searchTerm.toLowerCase())),
+        );
+      });
+    }
   }
 
   @override
@@ -99,6 +113,12 @@ class _MyCoursePageState extends State<MyCoursePage> {
                   ],
                 ),
                 child: TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      searchTerm = value;
+                      applySearchFilter();
+                    });
+                  },
                   decoration: InputDecoration(
                     hintText: "Discover your next lesson",
                     hintStyle: GoogleFonts.poppins(
@@ -139,7 +159,7 @@ class _MyCoursePageState extends State<MyCoursePage> {
                     },
                   ),
                 )
-              else if (myCourses.isEmpty)
+              else if (filteredCourses.isEmpty)
                 Expanded(
                   child: Center(
                     child: Column(
@@ -167,11 +187,11 @@ class _MyCoursePageState extends State<MyCoursePage> {
               else
                 Expanded(
                   child: ListView.builder(
-                    itemCount: myCourses.length,
+                    itemCount: filteredCourses.length,
                     itemBuilder: (context, index) {
-                      // Get the course and completed lessons from the map
-                      final course = myCourses.keys.elementAt(index);
-                      final lessonsCompleted = myCourses[course] ?? 0;
+                      // Get the course and completed lessons from the filtered map
+                      final course = filteredCourses.keys.elementAt(index);
+                      final lessonsCompleted = filteredCourses[course] ?? 0;
 
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 16.0),

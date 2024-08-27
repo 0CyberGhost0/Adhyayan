@@ -5,7 +5,6 @@ import 'package:adhyayan/widgets/popularCourse.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-// Import the shimmer effect
 import '../../Data_Models/courseModel.dart';
 import '../../services/CourseServices.dart';
 
@@ -18,12 +17,21 @@ class SavedCourse extends StatefulWidget {
 
 class _SavedCourseState extends State<SavedCourse> {
   List<Course> savedCourses = [];
+  List<Course> filteredCourses = [];
   bool isLoading = true; // To manage loading state
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     fetchSavedCourses();
+    searchController.addListener(_filterCourses);
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 
   Future<void> fetchSavedCourses() async {
@@ -43,7 +51,18 @@ class _SavedCourseState extends State<SavedCourse> {
 
     setState(() {
       savedCourses = fetchedCourses;
+      filteredCourses = fetchedCourses; // Initially, show all saved courses
       isLoading = false; // Set to false once data is loaded
+    });
+  }
+
+  void _filterCourses() {
+    String searchTerm = searchController.text.toLowerCase();
+
+    setState(() {
+      filteredCourses = savedCourses
+          .where((course) => course.title.toLowerCase().contains(searchTerm))
+          .toList();
     });
   }
 
@@ -105,6 +124,7 @@ class _SavedCourseState extends State<SavedCourse> {
                     ],
                   ),
                   child: TextField(
+                    controller: searchController, // Attach controller here
                     decoration: InputDecoration(
                       hintText: "Discover your next lesson",
                       hintStyle: GoogleFonts.poppins(
@@ -138,7 +158,7 @@ class _SavedCourseState extends State<SavedCourse> {
               if (isLoading)
                 Expanded(
                   child: ListView.builder(
-                    itemCount: 2, // Show 5 shimmer placeholders
+                    itemCount: 2, // Show 2 shimmer placeholders
                     itemBuilder: (context, index) {
                       return const Padding(
                         padding: EdgeInsets.all(16.0),
@@ -149,7 +169,7 @@ class _SavedCourseState extends State<SavedCourse> {
                   ),
                 )
               // Display "Search Course" when there are no courses
-              else if (savedCourses.isEmpty)
+              else if (filteredCourses.isEmpty)
                 Expanded(
                   child: Center(
                     child: Column(
@@ -162,7 +182,7 @@ class _SavedCourseState extends State<SavedCourse> {
                         ),
                         const SizedBox(height: 20),
                         Text(
-                          "Search Course",
+                          "No Courses Found",
                           style: GoogleFonts.poppins(
                             fontSize: 18,
                             fontWeight: FontWeight.w500,
@@ -177,7 +197,7 @@ class _SavedCourseState extends State<SavedCourse> {
               else
                 Expanded(
                   child: ListView.builder(
-                    itemCount: savedCourses.length,
+                    itemCount: filteredCourses.length,
                     itemBuilder: (context, index) {
                       return Container(
                         margin: const EdgeInsets.symmetric(
@@ -186,12 +206,21 @@ class _SavedCourseState extends State<SavedCourse> {
                         ), // Add margin to prevent shadow cutoff
                         child: Dismissible(
                           // Unique key based on course ID
-                          key: Key(savedCourses[index].id!),
+                          key: Key(filteredCourses[index].id!),
                           direction:
                               DismissDirection.endToStart, // Swipe direction
                           onDismissed: (direction) {
-                            unsaveCourse(savedCourses[index]
-                                .id!); // Call unsaveCourse function to remove the course
+                            setState(() {
+                              String courseId = filteredCourses[index].id!;
+                              unsaveCourse(
+                                  courseId); // Call unsaveCourse function to remove the course
+
+                              // Remove the dismissed course from both lists
+                              savedCourses.removeWhere(
+                                  (course) => course.id == courseId);
+                              filteredCourses.removeAt(
+                                  index); // Remove from the filtered list
+                            });
                           },
                           background: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -204,7 +233,7 @@ class _SavedCourseState extends State<SavedCourse> {
                             ),
                           ),
                           child: PopularCourseCard(
-                            course: savedCourses[index],
+                            course: filteredCourses[index],
                           ),
                         ),
                       );

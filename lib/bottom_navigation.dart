@@ -1,4 +1,5 @@
 import 'package:adhyayan/commons/color.dart';
+import 'package:adhyayan/screens/auth/profileScreen.dart';
 import 'package:adhyayan/screens/course/MyCourse.dart';
 import 'package:adhyayan/screens/course/savedCourse.dart';
 import 'package:adhyayan/screens/home/HomePage.dart';
@@ -75,12 +76,11 @@ class _BottomNavigationState extends State<BottomNavigation> {
       case 0:
         return HomePage(); // Replace with actual HomeScreen widget
       case 1:
-        return MyCoursePage(); // Replace with actual CourseScreen widget
+        return const MyCoursePage(); // Replace with actual CourseScreen widget
       case 2:
-        return SavedCourse(); // Replace with actual SavedScreen widget
+        return const SavedCourse(); // Replace with actual SavedScreen widget
       case 3:
-        return const Text(
-            "Profile Screen"); // Replace with actual ProfileScreen widget
+        return const ProfileScreen(); // Replace with actual ProfileScreen widget
       default:
         return const Text("Home Screen");
     }

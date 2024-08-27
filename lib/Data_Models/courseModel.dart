@@ -1,16 +1,20 @@
 class Lesson {
   final String title;
   final String content;
+  final String url;
+  bool completed = false;
 
   Lesson({
     required this.title,
     required this.content,
+    required this.url,
   });
 
   factory Lesson.fromJson(Map<String, dynamic> json) {
     return Lesson(
       title: json['title'],
       content: json['content'],
+      url: json['url'],
     );
   }
 
@@ -18,6 +22,7 @@ class Lesson {
     return {
       'title': title,
       'content': content,
+      'url': url,
     };
   }
 }
@@ -52,14 +57,20 @@ class Course {
         title: "Introduction to Dart",
         content:
             "This lesson covers the basics of the Dart programming language, including its syntax, variables, and basic data structures.",
+        url:
+            'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
       ),
       Lesson(
         title: "Flutter Widgets",
         content:
             "Learn about the core widgets in Flutter and how to use them to build user interfaces.",
+        url:
+            'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
       ),
       Lesson(
         title: "State Management",
+        url:
+            'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
         content:
             "Understand different state management approaches in Flutter, including Provider, Riverpod, and Bloc.",
       ),

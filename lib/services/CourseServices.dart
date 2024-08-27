@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:adhyayan/Data_Models/courseModel.dart';
+import 'package:adhyayan/Data_Models/userModel.dart';
 import 'package:adhyayan/provider/userProvider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -214,7 +215,7 @@ class CourseServices {
 
   Future<bool> enrollCourse(BuildContext context, String courseId) async {
     try {
-      print("inside enroll");
+      print("inside enroll called");
       // Make the HTTP GET request
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
@@ -245,26 +246,68 @@ class CourseServices {
     return false;
   }
 
-  Future<bool> isEnrolled(String courseId) async {
+  bool isEnrolled(BuildContext context, String courseId) {
     try {
-      print("check enrolled");
-      SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
-      final String? token = sharedPreferences.getString("x-auth-token");
-      http.Response res = await http.get(
-        Uri.parse('$URL/course/isEnrolled'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'courseId': courseId,
-          'x-auth-token': token!
-        },
-      );
-      print(res.body);
-
-      return jsonDecode(res.body);
+      // print("check enrolled");
+      // SharedPreferences sharedPreferences =
+      //     await SharedPreferences.getInstance();
+      // final String? token = sharedPreferences.getString("x-auth-token");
+      // http.Response res = await http.get(
+      //   Uri.parse('$URL/course/isEnrolled'),
+      //   headers: <String, String>{
+      //     'Content-Type': 'application/json; charset=UTF-8',
+      //     'courseId': courseId,
+      //     'x-auth-token': token!
+      //   },
+      // );
+      // print(res.body);
+      //
+      // return jsonDecode(res.body);
+      final user = Provider.of<UserProvider>(context, listen: false).user;
+      final enrolledCourses = user.enrolledCourses;
+      for (EnrolledCourse enrolledCourse in enrolledCourses) {
+        if (enrolledCourse.courseId == courseId) return true;
+      }
+      return false;
     } catch (err) {
       print(err);
     }
     return false;
+  }
+
+  Future<void> updateCompletedLessonNumber(
+    BuildContext context,
+    String courseId,
+    int completedLessonNo,
+  ) async {
+    try {
+      print("Updating completed lessons for course: $courseId");
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      final String? token = sharedPreferences.getString("x-auth-token");
+
+      http.Response res = await http.patch(
+        Uri.parse('$URL/course/updateCompletedLesson'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token!,
+        },
+        body: jsonEncode({
+          "courseId": courseId,
+          "completedLessonNo": completedLessonNo,
+        }),
+      );
+
+      if (res.statusCode == 200) {
+        final userProvider = Provider.of<UserProvider>(context, listen: false);
+        userProvider.setCompletedLessonNumber(courseId, completedLessonNo);
+        print("Completed lesson number updated successfully.");
+      } else {
+        print(
+            'Failed to update completed lesson number. Status code: ${res.statusCode}');
+      }
+    } catch (err) {
+      print("Updating completed lesson number error: $err");
+    }
   }
 }

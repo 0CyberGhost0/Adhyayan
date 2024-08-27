@@ -7,7 +7,12 @@ import '../commons/color.dart';
 class EnrollButton extends StatefulWidget {
   final String courseID;
   final VoidCallback onTap;
-  const EnrollButton({super.key, required this.courseID, required this.onTap});
+  final double price;
+  const EnrollButton(
+      {super.key,
+      required this.courseID,
+      required this.onTap,
+      required this.price});
 
   @override
   State<EnrollButton> createState() => _EnrollButtonState();
@@ -32,7 +37,7 @@ class _EnrollButtonState extends State<EnrollButton> {
           ),
         ),
         child: Text(
-          'Enroll Course - \$300',
+          'Enroll Course - ₹ ${widget.price}',
           style: GoogleFonts.poppins(
             fontSize: 18,
             fontWeight: FontWeight.bold,

@@ -109,7 +109,7 @@ class _PopularCourseCardState extends State<PopularCourseCard> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      '\$${widget.course.price.toStringAsFixed(2)}',
+                      '\₹ ${widget.course.price.toInt()}',
                       style: TextStyle(
                         color: progressIndicatorColor,
                         fontWeight: FontWeight.bold,

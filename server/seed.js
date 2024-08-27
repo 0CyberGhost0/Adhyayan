@@ -1,158 +1,323 @@
 const mongoose = require('mongoose');
 const Course = require("./models/courseModel");
 require("dotenv").config();
+
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-}).then(() => {
+})
+.then(() => {
   console.log('Connected to MongoDB');
-}).catch((err) => {
+  return seedDB(); // Seed data after connecting
+})
+.catch((err) => {
   console.error('Error connecting to MongoDB:', err);
 });
 
 // Seed Data
 const seedCourses = [
   {
-    title: 'Introduction to Design',
-    description: 'Learn the basics of design principles and how to apply them.',
-    instructor: 'John Doe',
-    price: 29.99,
-    rating: 4.5,
-    enrolledCount: 200,
-    thumbnailUrl: 'https://res.cloudinary.com/dxa9xqx3t/image/upload/v1724362040/courseImage/nxwwl7tycp25ttqzoz6s.png',
-    category: 'Design',
-    lessons: [
-      { title: 'Design Basics', content: 'Introduction to design concepts.' },
-      { title: 'Color Theory', content: 'Understanding color theory.' },
-    ],
+    "title": "Introduction to Graphic Design",
+    "description": "Learn the basics of graphic design, including principles, tools, and techniques.",
+    "instructor": "John Doe",
+    "price": 490,
+    "rating": 4.5,
+    "enrolledCount": 1200,
+    "thumbnailUrl": "https://res.cloudinary.com/dxa9xqx3t/image/upload/v1724362040/courseImage/nxwwl7tycp25ttqzoz6s.png",
+    "category": "Design",
+    "lessons": [
+      {
+        "title": "Design Principles",
+        "content": "Understanding the core principles of design.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "title": "Introduction to Adobe Illustrator",
+        "content": "Getting started with Adobe Illustrator and its tools.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "title": "Creating Vector Art",
+        "content": "Techniques for creating stunning vector artwork.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      }
+    ]
   },
   {
-    title: 'Advanced Coding in JavaScript',
-    description: 'Master advanced JavaScript concepts and patterns.',
-    instructor: 'Jane Smith',
-    price: 49.99,
-    rating: 4.7,
-    enrolledCount: 300,
-    thumbnailUrl: 'https://res.cloudinary.com/dxa9xqx3t/image/upload/v1724362040/courseImage/nxwwl7tycp25ttqzoz6s.png',
-    category: 'Code',
-    lessons: [
-      { title: 'Asynchronous JavaScript', content: 'Understanding async and await.' },
-      { title: 'JavaScript Design Patterns', content: 'Exploring design patterns.' },
-    ],
+    "title": "JavaScript for Beginners",
+    "description": "An introduction to JavaScript, covering basic syntax, data types, and functions.",
+    "instructor": "Jane Smith",
+    "price": 390,
+    "rating": 4.7,
+    "enrolledCount": 950,
+    "thumbnailUrl": "https://res.cloudinary.com/dxa9xqx3t/image/upload/v1724362040/courseImage/nxwwl7tycp25ttqzoz6s.png",
+    "category": "Code",
+    "lessons": [
+      {
+        "title": "Introduction to JavaScript",
+        "content": "Learn the basics of JavaScript and how it integrates with HTML.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "title": "JavaScript Variables and Data Types",
+        "content": "Understanding variables and different data types in JavaScript.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "title": "Control Structures in JavaScript",
+        "content": "Learn about loops, conditionals, and other control structures in JavaScript.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      }
+    ]
   },
   {
-    title: 'Business Strategy Essentials',
-    description: 'Develop a winning business strategy for your company.',
-    instructor: 'Richard Roe',
-    price: 39.99,
-    rating: 4.8,
-    enrolledCount: 150,
-    thumbnailUrl: 'https://res.cloudinary.com/dxa9xqx3t/image/upload/v1724362040/courseImage/nxwwl7tycp25ttqzoz6s.png',
-    category: 'Business',
-    lessons: [
-      { title: 'Strategic Planning', content: 'Basics of strategic planning.' },
-      { title: 'Market Analysis', content: 'How to analyze markets effectively.' },
-    ],
+    "title": "Data Science with Python",
+    "description": "An in-depth course on Data Science using Python, covering libraries like Pandas and NumPy.",
+    "instructor": "Alice Johnson",
+    "price": 590,
+    "rating": 4.8,
+    "enrolledCount": 1500,
+    "thumbnailUrl": "https://res.cloudinary.com/dxa9xqx3t/image/upload/v1724362040/courseImage/nxwwl7tycp25ttqzoz6s.png",
+    "category": "Data",
+    "lessons": [
+      {
+        "title": "Introduction to Data Science",
+        "content": "Overview of Data Science and its applications.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "title": "Python for Data Science",
+        "content": "Using Python for data manipulation and analysis.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "title": "Working with Pandas and NumPy",
+        "content": "Deep dive into data manipulation with Pandas and NumPy.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "title": "Data Visualization with Matplotlib",
+        "content": "Techniques for visualizing data with Matplotlib.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      }
+    ]
   },
   {
-    title: 'Data Science with Python',
-    description: 'Learn data science concepts and how to apply them using Python.',
-    instructor: 'Alice Johnson',
-    price: 59.99,
-    rating: 4.9,
-    enrolledCount: 400,
-    thumbnailUrl: 'https://res.cloudinary.com/dxa9xqx3t/image/upload/v1724362040/courseImage/nxwwl7tycp25ttqzoz6s.png',
-    category: 'Data',
-    lessons: [
-      { title: 'Data Analysis', content: 'Performing data analysis with Python.' },
-      { title: 'Machine Learning', content: 'Introduction to machine learning.' },
-    ],
+    "title": "Business Analytics",
+    "description": "Learn the fundamentals of Business Analytics, focusing on data-driven decision making.",
+    "instructor": "Michael Brown",
+    "price": 690,
+    "rating": 4.6,
+    "enrolledCount": 1100,
+    "thumbnailUrl": "https://res.cloudinary.com/dxa9xqx3t/image/upload/v1724362040/courseImage/nxwwl7tycp25ttqzoz6s.png",
+    "category": "Business",
+    "lessons": [
+      {
+        "title": "Introduction to Business Analytics",
+        "content": "Understanding the role of analytics in business decision making.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "title": "Data Collection and Preparation",
+        "content": "Techniques for collecting and preparing data for analysis.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "title": "Analytical Techniques",
+        "content": "Exploring different analytical techniques and tools.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      }
+    ]
   },
   {
-    title: 'Finance for Non-Finance Managers',
-    description: 'Understand the basics of finance to manage your business effectively.',
-    instructor: 'Mark White',
-    price: 44.99,
-    rating: 4.6,
-    enrolledCount: 250,
-    thumbnailUrl: 'https://res.cloudinary.com/dxa9xqx3t/image/upload/v1724362040/courseImage/nxwwl7tycp25ttqzoz6s.png',
-    category: 'Finance',
-    lessons: [
-      { title: 'Financial Statements', content: 'Understanding financial statements.' },
-      { title: 'Budgeting and Forecasting', content: 'How to create budgets and forecasts.' },
-    ],
-  },
-  // Add 5 more courses similarly...
-  {
-    title: 'User Experience Design',
-    description: 'Learn the principles of user experience design to create better products.',
-    instructor: 'Emily Clark',
-    price: 34.99,
-    rating: 4.3,
-    enrolledCount: 180,
-    thumbnailUrl: 'https://res.cloudinary.com/dxa9xqx3t/image/upload/v1724362040/courseImage/nxwwl7tycp25ttqzoz6s.png',
-    category: 'Design',
-    lessons: [
-      { title: 'Introduction to UX', content: 'Understanding user experience.' },
-      { title: 'User Research', content: 'Conducting user research.' },
-    ],
+    "title": "Financial Modeling",
+    "description": "A course on financial modeling, teaching you how to build financial models from scratch.",
+    "instructor": "Sara Davis",
+    "price": 790,
+    "rating": 4.9,
+    "enrolledCount": 1300,
+    "thumbnailUrl": "https://res.cloudinary.com/dxa9xqx3t/image/upload/v1724362040/courseImage/nxwwl7tycp25ttqzoz6s.png",
+    "category": "Finance",
+    "lessons": [
+      {
+        "title": "Introduction to Financial Modeling",
+        "content": "Overview of financial modeling and its importance.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "title": "Building Basic Financial Models",
+        "content": "Step-by-step guide to building basic financial models.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "title": "Advanced Financial Modeling Techniques",
+        "content": "Explore advanced techniques in financial modeling.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      }
+    ]
   },
   {
-    title: 'Full-Stack Web Development',
-    description: 'Become a full-stack web developer by learning frontend and backend technologies.',
-    instructor: 'Michael Brown',
-    price: 69.99,
-    rating: 4.9,
-    enrolledCount: 500,
-    thumbnailUrl: 'https://res.cloudinary.com/dxa9xqx3t/image/upload/v1724362040/courseImage/nxwwl7tycp25ttqzoz6s.png',
-    category: 'Code',
-    lessons: [
-      { title: 'Frontend Development', content: 'Learning HTML, CSS, and JavaScript.' },
-      { title: 'Backend Development', content: 'Building REST APIs with Node.js.' },
-    ],
+    "title": "Advanced React and Redux",
+    "description": "Master React and Redux with advanced concepts like middleware, async actions, and testing.",
+    "instructor": "Chris Evans",
+    "price": 790,
+    "rating": 4.9,
+    "enrolledCount": 2000,
+    "thumbnailUrl": "https://res.cloudinary.com/dxa9xqx3t/image/upload/v1724362040/courseImage/nxwwl7tycp25ttqzoz6s.png",
+    "category": "Code",
+    "lessons": [
+      {
+        "title": "React Middleware",
+        "content": "Understanding middleware in React applications.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "title": "Async Actions in Redux",
+        "content": "Handling asynchronous actions with Redux.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "title": "Testing React Components",
+        "content": "Best practices for testing React components.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      }
+    ]
   },
   {
-    title: 'Startup Entrepreneurship',
-    description: 'Learn how to start and grow your own business.',
-    instructor: 'Sarah Lee',
-    price: 54.99,
-    rating: 4.8,
-    enrolledCount: 280,
-    thumbnailUrl: 'https://res.cloudinary.com/dxa9xqx3t/image/upload/v1724362040/courseImage/nxwwl7tycp25ttqzoz6s.png',
-    category: 'Business',
-    lessons: [
-      { title: 'Business Planning', content: 'How to create a business plan.' },
-      { title: 'Funding Your Startup', content: 'Understanding startup funding.' },
-    ],
+    "title": "Mastering SQL for Data Analysis",
+    "description": "Become proficient in SQL for complex data analysis and manipulation.",
+    "instructor": "Emma Watson",
+    "price": 590,
+    "rating": 4.8,
+    "enrolledCount": 1800,
+    "thumbnailUrl": "https://res.cloudinary.com/dxa9xqx3t/image/upload/v1724362040/courseImage/nxwwl7tycp25ttqzoz6s.png",
+    "category": "Data",
+    "lessons": [
+      {
+        "title": "Advanced SQL Queries",
+        "content": "Learn advanced SQL queries for data manipulation.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "title": "Optimizing SQL Performance",
+        "content": "Techniques to optimize SQL query performance.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "title": "Working with Complex Joins",
+        "content": "Mastering complex joins for multi-table data analysis.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      }
+    ]
   },
   {
-    title: 'Data Visualization with Tableau',
-    description: 'Learn how to create stunning data visualizations using Tableau.',
-    instructor: 'Chris Green',
-    price: 39.99,
-    rating: 4.7,
-    enrolledCount: 220,
-    thumbnailUrl: 'https://res.cloudinary.com/dxa9xqx3t/image/upload/v1724362040/courseImage/nxwwl7tycp25ttqzoz6s.png',
-    category: 'Data',
-    lessons: [
-      { title: 'Introduction to Tableau', content: 'Getting started with Tableau.' },
-      { title: 'Advanced Visualizations', content: 'Creating advanced visualizations.' },
-    ],
+    "title": "Project Management Essentials",
+    "description": "Learn the essentials of project management, including methodologies, tools, and techniques.",
+    "instructor": "Tom Hiddleston",
+    "price": 690,
+    "rating": 4.7,
+    "enrolledCount": 1500,
+    "thumbnailUrl": "https://res.cloudinary.com/dxa9xqx3t/image/upload/v1724362040/courseImage/nxwwl7tycp25ttqzoz6s.png",
+    "category": "Business",
+    "lessons": [
+      {
+        "title": "Project Planning",
+        "content": "Strategies for effective project planning.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "title": "Risk Management",
+        "content": "Identifying and managing project risks.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "title": "Project Execution and Monitoring",
+        "content": "Best practices for project execution and monitoring.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      }
+    ]
   },
   {
-    title: 'Personal Finance Management',
-    description: 'Take control of your finances with practical tips and strategies.',
-    instructor: 'Laura King',
-    price: 29.99,
-    rating: 4.5,
-    enrolledCount: 300,
-    thumbnailUrl: 'https://res.cloudinary.com/dxa9xqx3t/image/upload/v1724362040/courseImage/nxwwl7tycp25ttqzoz6s.png',
-    category: 'Finance',
-    lessons: [
-      { title: 'Budgeting Basics', content: 'How to create a personal budget.' },
-      { title: 'Investing for Beginners', content: 'Introduction to investing.' },
-    ],
+    "title": "Python for Machine Learning",
+    "description": "Dive into machine learning with Python, exploring algorithms, libraries, and real-world applications.",
+    "instructor": "Robert Downey Jr.",
+    "price": 890,
+    "rating": 4.9,
+    "enrolledCount": 2200,
+    "thumbnailUrl": "https://res.cloudinary.com/dxa9xqx3t/image/upload/v1724362040/courseImage/nxwwl7tycp25ttqzoz6s.png",
+    "category": "Data",
+    "lessons": [
+      {
+        "title": "Introduction to Machine Learning",
+        "content": "Understanding the basics of machine learning.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "title": "Supervised Learning",
+        "content": "Exploring supervised learning algorithms.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "title": "Unsupervised Learning",
+        "content": "Techniques and applications of unsupervised learning.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      }
+    ]
+  },
+  {
+    "title": "Web Development with Django",
+    "description": "Learn how to build scalable web applications using Django, a popular Python framework.",
+    "instructor": "Scarlett Johansson",
+    "price": 790,
+    "rating": 4.8,
+    "enrolledCount": 1700,
+    "thumbnailUrl": "https://res.cloudinary.com/dxa9xqx3t/image/upload/v1724362040/courseImage/nxwwl7tycp25ttqzoz6s.png",
+    "category": "Code",
+    "lessons": [
+      {
+        "title": "Getting Started with Django",
+        "content": "Introduction to Django and setting up your environment.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "title": "Building Models in Django",
+        "content": "Learn how to create and manage models in Django.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "title": "Creating Views and Templates",
+        "content": "Learn how to create views and templates in Django.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      }
+    ]
+  },
+  {
+    "title": "Digital Marketing Masterclass",
+    "description": "Become an expert in digital marketing with this comprehensive masterclass.",
+    "instructor": "Ryan Reynolds",
+    "price": 690,
+    "rating": 4.7,
+    "enrolledCount": 2000,
+    "thumbnailUrl": "https://res.cloudinary.com/dxa9xqx3t/image/upload/v1724362040/courseImage/nxwwl7tycp25ttqzoz6s.png",
+    "category": "Business",
+    "lessons": [
+      {
+        "title": "Introduction to Digital Marketing",
+        "content": "Overview of digital marketing strategies and tools.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "title": "SEO Strategies",
+        "content": "Learn the best practices for search engine optimization.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        "title": "Content Marketing",
+        "content": "Creating effective content marketing strategies.",
+        "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      }
+    ]
   },
 ];
 
@@ -165,7 +330,7 @@ const seedDB = async () => {
   } catch (err) {
     console.error('Error seeding data:', err);
   } finally {
-    mongoose.connection.close();
+    mongoose.connection.close(); // Close the connection after seeding
   }
 };
 

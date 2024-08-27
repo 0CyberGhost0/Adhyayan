@@ -3,6 +3,7 @@ const Course=require("../models/courseModel");
 const authMiddleware=require("../routes/middleware/authMiddleware");
 const User=require("../models/userModel");
 const courseRouter=express();
+const mongoose=require("mongoose");
 courseRouter.get("/popularCourse", async (req, res) => {
     try {
         const popularCourses = await Course.find({})
@@ -131,30 +132,30 @@ courseRouter.get("/getCourseDetail",async(req,res)=>{
 });
 courseRouter.post("/enrollCourse", authMiddleware, async (req, res) => {
     try {
-      console.log("inside enroll");
+      console.log("Inside enroll");
       
       // Get the userId from the auth middleware and courseId from the request headers
       const userId = req.user; 
       const courseId = req.header("courseId");
-  
+      
       // Fetch the user from the database
       const user = await User.findById(userId);
-  
+      
       // Check if the user is already enrolled in the course
       const isAlreadyEnrolled = user.enrolledCourses.some(
         (course) => course.courseId.toString() === courseId
       );
-  
+      
       if (isAlreadyEnrolled) {
         return res.status(400).json({ message: "User is already enrolled in this course." });
       }
-  
+      
       // Add the course to the enrolledCourses array
       user.enrolledCourses.push({ courseId });
-  
+      
       // Save the updated user document
       await user.save();
-  
+      
       return res.status(200).json({ message: "User successfully enrolled in the course." });
     } catch (error) {
       console.error(error);
@@ -166,7 +167,6 @@ courseRouter.post("/enrollCourse", authMiddleware, async (req, res) => {
         console.log("check enroll");
         const userId=req.user;
         const courseId=req.header("courseId");
-        const user=await User.findById(userId);
         const isAlreadyEnrolled = user.enrolledCourses.some(
             (course) => course.courseId.toString() === courseId
           );
@@ -177,5 +177,31 @@ courseRouter.post("/enrollCourse", authMiddleware, async (req, res) => {
         
     }
 
-  })
+  });
+  courseRouter.patch('/updateCompletedLesson', authMiddleware,async (req, res) => {
+    const { courseId, completedLessonNo } = req.body;
+    const userId = req.user; // Assuming user ID is attached to req.user
+  
+    try {
+        console.log("inside complete lesson");
+      const user = await User.findOne({ _id: userId, 'enrolledCourses.courseId': courseId });
+  
+      if (!user) {
+        return res.status(404).send('User or course not found');
+      }
+  
+      const enrolledCourse = await user.enrolledCourses.find(enrolled => enrolled.courseId.toString() === courseId);
+      
+      if (enrolledCourse) {
+        enrolledCourse.completedLessonNo = completedLessonNo;
+        await user.save();
+        return res.status(200).send('Completed lesson number updated');
+      } else {
+        return res.status(404).send('Enrolled course not found');
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Server error');
+    }
+  });
 module.exports=courseRouter;

@@ -1,4 +1,6 @@
 import 'package:adhyayan/commons/socialButton.dart';
+import 'package:adhyayan/provider/userProvider.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:adhyayan/commons/color.dart';
@@ -6,6 +8,8 @@ import 'package:adhyayan/services/CourseServices.dart';
 import 'package:adhyayan/widgets/courseLessonList.dart';
 import 'package:adhyayan/widgets/EnrollButton.dart';
 import 'package:adhyayan/widgets/mentorCard.dart';
+import 'package:provider/provider.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import '../../Data_Models/courseModel.dart';
 
 class CourseDetailScreen extends StatefulWidget {
@@ -19,7 +23,55 @@ class CourseDetailScreen extends StatefulWidget {
 
 class _CourseDetailScreenState extends State<CourseDetailScreen> {
   bool isCourseSelected = true;
-  bool isEnrolled = true;
+  bool isEnrolled = false;
+  Razorpay razorpay = Razorpay();
+
+  @override
+  void initState() {
+    super.initState();
+    isCourseEnrolled();
+    razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  void isCourseEnrolled() async {
+    CourseServices courseServices = CourseServices();
+    bool enrolled = await courseServices.isEnrolled(context, widget.course.id!);
+    setState(() {
+      isEnrolled = enrolled;
+    });
+  }
+
+  void _enrollCourse() async {
+    CourseServices courseServices = CourseServices();
+    final success =
+        await courseServices.enrollCourse(context, widget.course.id!);
+    if (success) {
+      setState(() {
+        isEnrolled = true;
+      });
+    }
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(const SnackBar(content: Text("SUCCESSFUL!!")));
+    _enrollCourse();
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("FAILED!! : ${response.message}")));
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {}
+
+  @override
+  void dispose() {
+    razorpay.clear();
+    super.dispose();
+  }
 
   void _toggleTab() {
     setState(() {
@@ -28,32 +80,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    isCourseEnrolled();
-  }
-
-  void isCourseEnrolled() async {
-    CourseServices courseServices = CourseServices();
-    bool enrolled = await courseServices.isEnrolled(widget.course.id!);
-    print("IS IT ENROLLED: $enrolled");
-    setState(() {
-      isEnrolled = enrolled;
-    });
-  }
-
-  void _enrollCourse() async {
-    print("enroll function called");
-    CourseServices courseServices = CourseServices();
-    final success =
-        await courseServices.enrollCourse(context, widget.course.id!);
-    setState(() {
-      isEnrolled = true;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -217,13 +246,16 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: widget.course.lessons.length,
                     itemBuilder: (context, index) {
-                      bool enrolled = isEnrolled || (index == 0);
+                      bool enrolled = isEnrolled &&
+                          (userProvider.getCompletedLessonNumber(
+                                  widget.course.id!) >=
+                              index - 1);
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: CourseListItem(
-                          title: widget.course.lessons[index].title,
-                          duration: 'Duration Info',
-                          isEnrolled: enrolled,
+                          isEnrolled: enrolled || index == 0,
+                          course: widget.course,
+                          index: index,
                         ),
                       );
                     },
@@ -240,8 +272,21 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
       ),
       bottomNavigationBar: !isEnrolled
           ? EnrollButton(
+              price: widget.course.price,
               courseID: widget.course.id!,
-              onTap: _enrollCourse,
+              onTap: () {
+                var options = {
+                  'key': 'rzp_test_T9pURegWa78aId',
+                  'amount': widget.course.price * 100,
+                  'name': 'Adhyayan Pvt Ltd',
+                  'description': widget.course.title,
+                  'prefill': {
+                    'contact': userProvider.user.phone,
+                    'email': userProvider.user.email,
+                  }
+                };
+                razorpay.open(options);
+              },
             )
           : null,
     );

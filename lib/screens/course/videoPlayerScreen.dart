@@ -6,10 +6,18 @@ import 'package:appinio_video_player/appinio_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_video_player/cached_video_player.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
+import '../../Data_Models/notificationModel.dart';
+import '../../provider/notficationProvider.dart';
+import '../../widgets/courseLessonList.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
   final Course course;
   final int index;
+
   const VideoPlayerScreen(
       {super.key, required this.course, required this.index});
 
@@ -21,6 +29,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   late CustomVideoPlayerController _customVideoPlayerController;
   late CachedVideoPlayerController _videoPlayerController;
   bool _videoLoadError = false;
+  bool _isCompleted = false;
 
   @override
   void initState() {
@@ -30,38 +39,53 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   void dispose() {
-    _videoPlayerController.dispose(); // Dispose the video player controller
-    _customVideoPlayerController
-        .dispose(); // Dispose the custom video player controller
+    _videoPlayerController.dispose();
+    _customVideoPlayerController.dispose();
     super.dispose();
   }
 
   final String sampleNetworkVideo =
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+      "https://res.cloudinary.com/dxa9xqx3t/video/upload/v1724822198/sampleVideo/SampleVideo_bohfbx.mp4";
 
   void initializeVideoPlayer() {
-    _videoPlayerController =
-        CachedVideoPlayerController.network(sampleNetworkVideo)
-          ..initialize().then((_) {
-            if (mounted) {
-              setState(() {});
-            }
-          }).catchError((error) {
-            setState(() {
-              _videoLoadError = true;
-            });
-          });
+    _videoPlayerController = CachedVideoPlayerController.network(
+        widget.course.lessons[widget.index].url)
+      ..initialize().then((_) {
+        if (mounted) {
+          setState(() {});
+        }
+      }).catchError((error) {
+        setState(() {
+          _videoLoadError = true;
+        });
+      });
 
-    // Listen to the video state to detect completion
     _videoPlayerController.addListener(() {
       if (_videoPlayerController.value.position >=
           _videoPlayerController.value.duration) {
-        print("video complete");
         CourseServices courseServices = CourseServices();
         courseServices.updateCompletedLessonNumber(
             context, widget.course.id!, widget.index);
+        if (widget.course.lessons[widget.index].completed == false) {
+          if (widget.course.lessons.length - 1 == widget.index) {
+            String formattedTime =
+                DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now());
+            Provider.of<NotificationProvider>(context, listen: false)
+                .addNotification(
+              NotificationModel(
+                icon: Icons.check_circle,
+                title: '🎉 Congratulations!',
+                description:
+                    'You have successfully completed the course: ${widget.course.title}. Well done on your achievement!',
+                time: formattedTime,
+                statusColor: Colors.green,
+              ),
+            );
+          }
+        }
         setState(() {
           widget.course.lessons[widget.index].completed = true;
+          _isCompleted = true;
         });
       }
     });
@@ -77,7 +101,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.of(context).pop(_isCompleted);
+        return false;
+      },
       child: Scaffold(
         backgroundColor: backGroundColor,
         appBar: AppBar(
@@ -91,7 +119,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.of(context).pop(_isCompleted);
             },
           ),
           backgroundColor: backGroundColor,
@@ -101,7 +129,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         ),
         body: Column(
           children: [
-            // Video Player
             Container(
               height: 200,
               margin: const EdgeInsets.only(bottom: 20),
@@ -113,21 +140,22 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                       ),
                     )
                   : _videoPlayerController.value.isInitialized
-                      ? CustomVideoPlayer(
-                          customVideoPlayerController:
-                              _customVideoPlayerController,
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: CustomVideoPlayer(
+                            customVideoPlayerController:
+                                _customVideoPlayerController,
+                          ),
                         )
                       : const Center(
                           child: CircularProgressIndicator(),
                         ),
             ),
-            // Scrollable Content
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Lesson Title
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Text(
@@ -138,8 +166,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                         ),
                       ),
                     ),
-
-                    // Lesson Description
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16.0, vertical: 10.0),
@@ -150,17 +176,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                       ),
                     ),
 
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 10.0),
-                      child: Text(
-                        "Upcoming Lessons",
-                        style: GoogleFonts.poppins(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
+                    // Check if there is a next lesson
 
                     Padding(
                       padding: const EdgeInsets.symmetric(
@@ -173,19 +189,16 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                         ),
                       ),
                     ),
-                    // Mentor Card
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25.0),
                       child: MentorCard(
-                        mentorName: "Ved Prakash",
-                        mentorTitle: 'Coding',
+                        mentorName: widget.course.instructor,
+                        mentorTitle: widget.course.category,
                         mentorImage: "assets/images/mentor.png",
-                        rating: 5.6,
+                        rating: widget.course.rating,
                       ),
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
                   ],
                 ),
               ),

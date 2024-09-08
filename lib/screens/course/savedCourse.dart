@@ -18,8 +18,9 @@ class SavedCourse extends StatefulWidget {
 class _SavedCourseState extends State<SavedCourse> {
   List<Course> savedCourses = [];
   List<Course> filteredCourses = [];
-  bool isLoading = true; // To manage loading state
+  bool isLoading = true;
   TextEditingController searchController = TextEditingController();
+  final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
 
   @override
   void initState() {
@@ -49,10 +50,12 @@ class _SavedCourseState extends State<SavedCourse> {
       }
     }
 
+    if (!mounted) return; // Check if the widget is still mounted
+
     setState(() {
       savedCourses = fetchedCourses;
-      filteredCourses = fetchedCourses; // Initially, show all saved courses
-      isLoading = false; // Set to false once data is loaded
+      filteredCourses = List.from(fetchedCourses);
+      isLoading = false;
     });
   }
 
@@ -66,9 +69,20 @@ class _SavedCourseState extends State<SavedCourse> {
     });
   }
 
-  void unsaveCourse(String courseId) {
-    CourseServices courseService = CourseServices();
-    courseService.unsaveCourse(courseId, context);
+  void unsaveCourse(String courseId) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    try {
+      await CourseServices().unsaveCourse(courseId, context);
+      if (mounted) {
+        setState(() {
+          userProvider.unsaveCourse(courseId);
+          savedCourses.removeWhere((course) => course.id == courseId);
+          filteredCourses.removeWhere((course) => course.id == courseId);
+        });
+      }
+    } catch (e) {
+      print('Failed to unsave course with ID $courseId: $e');
+    }
   }
 
   @override
@@ -87,7 +101,6 @@ class _SavedCourseState extends State<SavedCourse> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              // Row with "Saved Courses" title
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -101,12 +114,8 @@ class _SavedCourseState extends State<SavedCourse> {
                 ],
               ),
               const SizedBox(height: 20),
-
-              // Search Bar with updated styling
               GestureDetector(
-                onTap: () {
-                  // Handle search bar tap if needed
-                },
+                onTap: () {},
                 child: Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -115,16 +124,15 @@ class _SavedCourseState extends State<SavedCourse> {
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1), // Shadow color
-                        spreadRadius: 1, // Spread radius
-                        blurRadius: 4, // Blur radius
-                        offset:
-                            const Offset(0, 4), // Offset in x and y direction
+                        color: Colors.black.withOpacity(0.1),
+                        spreadRadius: 1,
+                        blurRadius: 4,
+                        offset: const Offset(0, 4),
                       ),
                     ],
                   ),
                   child: TextField(
-                    controller: searchController, // Attach controller here
+                    controller: searchController,
                     decoration: InputDecoration(
                       hintText: "Discover your next lesson",
                       hintStyle: GoogleFonts.poppins(
@@ -140,8 +148,7 @@ class _SavedCourseState extends State<SavedCourse> {
                       contentPadding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 16),
                       prefixIcon: Padding(
-                        padding: const EdgeInsets.all(
-                            12.0), // Adjust padding as needed
+                        padding: const EdgeInsets.all(12.0),
                         child: Image.asset(
                           'assets/images/search.png',
                           width: 20,
@@ -153,22 +160,19 @@ class _SavedCourseState extends State<SavedCourse> {
                 ),
               ),
               const SizedBox(height: 20),
-
-              // Display the shimmer effect while loading
               if (isLoading)
                 Expanded(
                   child: ListView.builder(
-                    itemCount: 2, // Show 2 shimmer placeholders
+                    key: listKey,
+                    itemCount: 2,
                     itemBuilder: (context, index) {
                       return const Padding(
                         padding: EdgeInsets.all(16.0),
-                        child:
-                            PopularCourseCardShimmer(), // Shimmer placeholder
+                        child: PopularCourseCardShimmer(),
                       );
                     },
                   ),
                 )
-              // Display "Search Course" when there are no courses
               else if (filteredCourses.isEmpty)
                 Expanded(
                   child: Center(
@@ -193,40 +197,40 @@ class _SavedCourseState extends State<SavedCourse> {
                     ),
                   ),
                 )
-              // Display the courses if available
               else
                 Expanded(
                   child: ListView.builder(
+                    key: listKey,
                     itemCount: filteredCourses.length,
                     itemBuilder: (context, index) {
                       return Container(
                         margin: const EdgeInsets.symmetric(
                           horizontal: 14.0,
                           vertical: 10.0,
-                        ), // Add margin to prevent shadow cutoff
+                        ),
                         child: Dismissible(
-                          // Unique key based on course ID
                           key: Key(filteredCourses[index].id!),
-                          direction:
-                              DismissDirection.endToStart, // Swipe direction
+                          direction: DismissDirection.endToStart,
                           onDismissed: (direction) {
-                            setState(() {
-                              String courseId = filteredCourses[index].id!;
-                              unsaveCourse(
-                                  courseId); // Call unsaveCourse function to remove the course
+                            String courseId = filteredCourses[index].id!;
+                            if (!mounted)
+                              return; // Check if the widget is still mounted
 
-                              // Remove the dismissed course from both lists
-                              savedCourses.removeWhere(
-                                  (course) => course.id == courseId);
-                              filteredCourses.removeAt(
-                                  index); // Remove from the filtered list
-                            });
+                            unsaveCourse(courseId);
+
+                            // Use setState to update the list only if mounted
+                            if (mounted) {
+                              setState(() {
+                                filteredCourses.removeAt(index);
+                              });
+                            }
+
+                            // Show a snack bar with an undo option
                           },
                           background: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             alignment: Alignment.centerRight,
-                            color: Colors
-                                .transparent, // Background color when swiped
+                            color: Colors.transparent,
                             child: const Icon(
                               Icons.delete,
                               color: Colors.redAccent,

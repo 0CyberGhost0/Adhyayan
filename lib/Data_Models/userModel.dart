@@ -35,11 +35,12 @@ class User {
   final String lastName;
   final String email;
   final String password;
-  final String? profilePictureUrl;
-  final String phone;
+  String? profilePictureUrl;
+  String phone;
   final List<EnrolledCourse> enrolledCourses;
   final List<String> savedCourses;
   final String userName;
+  final String token;
 
   User({
     this.id,
@@ -52,6 +53,7 @@ class User {
     required this.enrolledCourses,
     required this.savedCourses,
     required this.phone,
+    required this.token,
   });
 
   Map<String, dynamic> toMap() {
@@ -67,6 +69,7 @@ class User {
           enrolledCourses.map((course) => course.toMap()).toList(),
       'savedCourses': savedCourses,
       'userName': userName,
+      'token': token,
     };
   }
 
@@ -77,7 +80,7 @@ class User {
       lastName: map['lastName'] ?? '',
       email: map['email'] ?? '',
       password: map['password'] ?? '',
-      profilePictureUrl: map['profilePictureUrl'] ?? '',
+      profilePictureUrl: map['profileImageUrl'] ?? '',
       phone: map['phone'] ?? '',
       enrolledCourses: List<EnrolledCourse>.from(
         (map['enrolledCourses'] ?? [])
@@ -88,6 +91,7 @@ class User {
             .map((course) => course['courseId'] as String),
       ),
       userName: map['userName'] ?? '',
+      token: map['token'] ?? '',
     );
   }
 

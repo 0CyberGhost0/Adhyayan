@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:adhyayan/Data_Models/courseModel.dart';
 import 'package:adhyayan/provider/userProvider.dart';
 import 'package:adhyayan/services/CourseServices.dart';
+import 'package:shimmer/shimmer.dart';
 import '../commons/color.dart';
 
 class CourseCard extends StatefulWidget {
@@ -56,10 +57,11 @@ class _CourseCardState extends State<CourseCard> {
         GestureDetector(
           onTap: () {
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        CourseDetailScreen(course: widget.course)));
+              context,
+              MaterialPageRoute(
+                builder: (context) => CourseDetailScreen(course: widget.course),
+              ),
+            );
           },
           child: Container(
             decoration: BoxDecoration(
@@ -84,12 +86,46 @@ class _CourseCardState extends State<CourseCard> {
                     height: 100,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      image: DecorationImage(
-                        image: NetworkImage(
-                          scale: 200,
-                          widget.course.thumbnailUrl,
-                        ),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        widget.course.thumbnailUrl,
                         fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: 100,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          } else {
+                            return Shimmer.fromColors(
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              child: Container(
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            height: 100,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Center(
+                              child: Icon(
+                                Icons.error,
+                                color: Colors.red,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ),

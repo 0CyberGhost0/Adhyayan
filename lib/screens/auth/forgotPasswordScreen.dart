@@ -1,4 +1,8 @@
 import 'package:adhyayan/commons/color.dart';
+import 'package:adhyayan/screens/auth/forgotPassVerifyEmail.dart';
+import 'package:adhyayan/screens/auth/verify_email.dart';
+import 'package:adhyayan/services/AuthService.dart';
+import 'package:adhyayan/services/OTPServices.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -54,10 +58,11 @@ class ForgotPassword extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController emailController = TextEditingController();
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: backGroundColor,
       body: Padding(
-        padding: EdgeInsets.all(TSizes.defaultSpace),
+        padding: EdgeInsets.all(TSizes.defaultSpace).copyWith(top: 300),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -81,6 +86,7 @@ class ForgotPassword extends StatelessWidget {
                 labelText: "E-Mail",
                 prefixIcon: const Icon(Iconsax.user_edit),
               ),
+              controller: emailController,
             ),
             SizedBox(height: TSizes.spaceBtwSections),
             SizedBox(
@@ -103,7 +109,18 @@ class ForgotPassword extends StatelessWidget {
                     borderRadius: BorderRadius.circular(TSizes.buttonRadius),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () async {
+                  OTPService otpService = OTPService();
+                  bool sent =
+                      await otpService.getOTP(context, emailController.text);
+                  if (sent) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ForgotPassVerifyEmail(
+                                email: emailController.text)));
+                  }
+                },
                 child: Text("Submit"),
               ),
             )

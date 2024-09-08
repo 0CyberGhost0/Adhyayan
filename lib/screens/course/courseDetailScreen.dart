@@ -1,6 +1,7 @@
-import 'package:adhyayan/commons/socialButton.dart';
+import 'package:adhyayan/Data_Models/notificationModel.dart';
+
 import 'package:adhyayan/provider/userProvider.dart';
-import 'package:flutter/gestures.dart';
+import 'package:adhyayan/screens/course/videoPlayerScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:adhyayan/commons/color.dart';
@@ -8,9 +9,13 @@ import 'package:adhyayan/services/CourseServices.dart';
 import 'package:adhyayan/widgets/courseLessonList.dart';
 import 'package:adhyayan/widgets/EnrollButton.dart';
 import 'package:adhyayan/widgets/mentorCard.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import '../../Data_Models/courseModel.dart';
+import '../../commons/utils.dart';
+import '../../provider/notficationProvider.dart';
 
 class CourseDetailScreen extends StatefulWidget {
   final Course course;
@@ -55,14 +60,50 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text("SUCCESSFUL!!")));
+    showCustomSnackBar(
+      context,
+      message:
+          "Your payment has been processed successfully. Thank you for your purchase!",
+      title: "Payment Successful",
+      isSuccess: true,
+    );
+
     _enrollCourse();
+    String formattedTime =
+        DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now());
+
+    // Add notification for successful payment
+    Provider.of<NotificationProvider>(context, listen: false)
+        .addNotification(NotificationModel(
+      icon: Icons.monetization_on_outlined,
+      title: 'Payment Successful',
+      description: 'You have successfully enrolled in ${widget.course.title}.',
+      time: formattedTime,
+      statusColor: Colors.green,
+    ));
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("FAILED!! : ${response.message}")));
+    showCustomSnackBar(
+      context,
+      message:
+          "We were unable to process your payment. Please check your details and try again, or contact your bank.",
+      title: "Payment Failed!",
+      isSuccess: false,
+    );
+    String formattedTime =
+        DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now());
+    // Add notification for failed payment
+    Provider.of<NotificationProvider>(context, listen: false).addNotification(
+      NotificationModel(
+        icon: Icons.monetization_on_outlined,
+        title: 'Payment Failed',
+        description:
+            'Your payment for ${widget.course.title} was not successful. If money was deducted, it will be refunded.',
+        time: formattedTime,
+        statusColor: Colors.red,
+      ),
+    );
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {}
@@ -79,11 +120,31 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
     });
   }
 
+  void _openVideoPlayer(int index) async {
+    final bool? isCompleted = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VideoPlayerScreen(
+          course: widget.course,
+          index: index,
+        ),
+      ),
+    );
+
+    // Update the lesson completion status if the video was completed
+    if (isCompleted == true) {
+      setState(() {
+        widget.course.lessons[index].completed = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     return Scaffold(
+      backgroundColor: backGroundColor,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
@@ -253,6 +314,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: CourseListItem(
+                          onTap: () {
+                            _openVideoPlayer(index);
+                          },
                           isEnrolled: enrolled || index == 0,
                           course: widget.course,
                           index: index,

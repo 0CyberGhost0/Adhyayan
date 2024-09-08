@@ -204,4 +204,49 @@ courseRouter.post("/enrollCourse", authMiddleware, async (req, res) => {
       res.status(500).send('Server error');
     }
   });
+  courseRouter.post("/addCourse", authMiddleware, async (req, res) => {
+    try {
+        // Extracting the course details from the request body
+        console.log("inside add course");
+        const {
+            title,
+            description,
+            price,
+            thumbnailUrl,
+            category,
+            lessons,
+        } = req.body;
+
+        // Validate that required fields are provided
+        if (!title || !description || !price || !category) {
+            return res.status(400).json({ message: "Missing required fields." });
+        }
+        const user=await User.findById(req.user);
+        const instructor=user.firstName;
+        user.userType="Mentor";
+        if(user.lastName){
+            instructor=instructor+user.lastName;
+        }
+        console.log(instructor);
+        // Create a new course instance
+        const newCourse = new Course({
+            title,
+            description,
+            instructor,
+            price,
+            thumbnailUrl,
+            category,
+            lessons,
+        });
+
+        // Save the new course to the database
+        const savedCourse = await newCourse.save();
+
+        // Return success response with the saved course
+        res.status(200).json(savedCourse);
+    } catch (error) {
+        // Return error response if something goes wrong
+        res.status(500).json({ error: error.message });
+    }
+});
 module.exports=courseRouter;

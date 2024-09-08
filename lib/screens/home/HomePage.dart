@@ -1,7 +1,13 @@
 import 'package:adhyayan/Data_Models/courseModel.dart';
 import 'package:adhyayan/Data_Models/userModel.dart';
+
 import 'package:adhyayan/commons/color.dart';
 import 'package:adhyayan/provider/userProvider.dart';
+import 'package:adhyayan/screens/auth/UploadCourseScreen.dart';
+
+import 'package:adhyayan/screens/course/courseDetailScreen.dart';
+import 'package:adhyayan/screens/home/NavBar.dart';
+import 'package:adhyayan/screens/home/NotificationDrawer.dart';
 import 'package:adhyayan/screens/home/searchScreen.dart';
 import 'package:adhyayan/services/CourseServices.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +15,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../provider/notficationProvider.dart';
 import '../../widgets/PopularCardShimmer.dart';
 import '../../widgets/categoryIcon.dart';
 import '../../widgets/continueLearningCard.dart';
@@ -21,6 +28,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   Course recentCourse = Course(
     title: '',
     description: '',
@@ -63,6 +72,7 @@ class _HomePageState extends State<HomePage> {
     Course fetchedCourse =
         await courseServices.getCourseById(enrolledCourse.courseId);
 
+    if (!mounted) return; // Check if the widget is still mounted
     setState(() {
       recentCourse = fetchedCourse;
     });
@@ -72,12 +82,14 @@ class _HomePageState extends State<HomePage> {
     try {
       CourseServices courseService = CourseServices();
       final fetchedCourses = await courseService.getPopularCourse();
+      if (!mounted) return; // Check if the widget is still mounted
       setState(() {
         popularCourses = fetchedCourses;
         isLoading = false;
       });
     } catch (error) {
       print('Failed to fetch popular courses: $error');
+      if (!mounted) return; // Check if the widget is still mounted
       setState(() {
         isLoading = false;
       });
@@ -86,15 +98,20 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final notificationProvider = Provider.of<NotificationProvider>(context);
+
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: NavBar(),
       backgroundColor: backGroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: const Icon(
-          Icons.menu,
-          color: Colors.black,
-          size: 28,
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.menu, color: Colors.black, size: 28),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
         ),
         title: Align(
           alignment: Alignment.center,
@@ -109,10 +126,58 @@ class _HomePageState extends State<HomePage> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
-            child: Image.asset(
-              'assets/images/notification.png',
-              width: 26,
-              height: 26,
+            child: Consumer<NotificationProvider>(
+              builder: (context, notificationProvider, child) {
+                return Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    IconButton(
+                      icon: Image.asset(
+                        'assets/images/notification.png',
+                        width: 26,
+                        height: 26,
+                      ),
+                      onPressed: () {
+                        // Mark all notifications as read when the dialog is shown
+                        notificationProvider.markAllAsRead();
+                        showDialog(
+                          context: context,
+                          builder: (context) => NotificationDialog(),
+                        );
+                      },
+                    ),
+                    if (notificationProvider.unreadNotificationCount > 0)
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 2.0,
+                            horizontal: 6.0,
+                          ),
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                          constraints: const BoxConstraints(
+                            minWidth: 20,
+                            minHeight: 20,
+                          ),
+                          child: Center(
+                            child: Text(
+                              '${notificationProvider.unreadNotificationCount}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                );
+              },
             ),
           ),
         ],
@@ -196,6 +261,13 @@ class _HomePageState extends State<HomePage> {
                   : ContinueLearningCard(
                       course: recentCourse,
                       lessonsCompleted: lessonCompleted,
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    CourseDetailScreen(course: recentCourse)));
+                      },
                     ),
               const SizedBox(height: 24),
             ],
@@ -211,7 +283,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 TextButton(
                   onPressed: () {
-// Handle 'View All' action
+                    // Handle 'View All' action
                   },
                   child: Text(
                     'View All',
@@ -231,10 +303,12 @@ class _HomePageState extends State<HomePage> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: 2,
                     itemBuilder: (context, index) {
-                      return Padding(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          child: const PopularCourseCardShimmer());
-                    })
+                      return const Padding(
+                        padding: EdgeInsets.only(bottom: 16.0),
+                        child: PopularCourseCardShimmer(),
+                      );
+                    },
+                  )
                 : ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),

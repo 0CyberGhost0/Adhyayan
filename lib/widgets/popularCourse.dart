@@ -1,11 +1,10 @@
 import 'package:adhyayan/commons/color.dart';
 import 'package:adhyayan/provider/userProvider.dart';
-
 import 'package:adhyayan/screens/course/courseDetailScreen.dart';
-import 'package:adhyayan/services/AuthService.dart';
 import 'package:adhyayan/services/CourseServices.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import '../Data_Models/courseModel.dart';
 
 class PopularCourseCard extends StatefulWidget {
@@ -43,7 +42,6 @@ class _PopularCourseCardState extends State<PopularCourseCard> {
 
   @override
   void initState() {
-    // TODO: implement initState
     final user = Provider.of<UserProvider>(context, listen: false).user;
     final String currCourseId = widget.course.id!;
     bool flag = user.savedCourses.contains(currCourseId);
@@ -83,22 +81,54 @@ class _PopularCourseCardState extends State<PopularCourseCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Course Image with Stack for Price Chip
             Stack(
               children: [
-                // Course Image
                 Container(
                   width: double.infinity,
                   height: 160,
-                  decoration: BoxDecoration(
+                  child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                      image: NetworkImage(widget.course.thumbnailUrl),
+                    child: Image.network(
+                      widget.course.thumbnailUrl,
                       fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: 160,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        } else {
+                          return Shimmer.fromColors(
+                            baseColor: Colors.grey[300]!,
+                            highlightColor: Colors.grey[100]!,
+                            child: Container(
+                              width: double.infinity,
+                              height: 160,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          height: 160,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: const Center(
+                            child: Icon(
+                              Icons.error,
+                              color: Colors.red,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
-                // Positioned Price Container with Rounded Corners
                 Positioned(
                   top: 125,
                   right: 12,
@@ -120,9 +150,7 @@ class _PopularCourseCardState extends State<PopularCourseCard> {
                 ),
               ],
             ),
-            SizedBox(height: 12),
-
-            // Row with Texts and Bookmark Image
+            const SizedBox(height: 12),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -141,7 +169,7 @@ class _PopularCourseCardState extends State<PopularCourseCard> {
                       const SizedBox(height: 4),
                       Text(
                         widget.course.title,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
                           color: Colors.black,
@@ -151,7 +179,7 @@ class _PopularCourseCardState extends State<PopularCourseCard> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '${widget.course.lessons.length} Lessons  •  Approx ${widget.course.lessons.length * 3} Hours', // Example logic for duration
+                        '${widget.course.lessons.length} Lessons  •  Approx ${widget.course.lessons.length * 3} Hours',
                         style: TextStyle(
                           color: Colors.grey[600],
                           fontSize: 14,
@@ -160,25 +188,24 @@ class _PopularCourseCardState extends State<PopularCourseCard> {
                     ],
                   ),
                 ),
-                // Bookmark Image inside a Container
                 GestureDetector(
                   onTap: isBookmarked ? unsaveCourse : saveCourse,
                   child: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: categoryBoxColor,
-                      shape: BoxShape.circle, // Background color for the image
+                      shape: BoxShape.circle,
                     ),
                     child: isBookmarked
                         ? Image.asset(
                             'assets/images/bookmark2.png',
-                            width: 20, // Adjust width if needed
-                            height: 20, // Adjust height if needed
+                            width: 20,
+                            height: 20,
                           )
                         : Image.asset(
                             'assets/images/bookmark1.png',
-                            width: 20, // Adjust width if needed
-                            height: 20, // Adjust height if needed
+                            width: 20,
+                            height: 20,
                           ),
                   ),
                 ),

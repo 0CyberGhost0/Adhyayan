@@ -6,6 +6,8 @@ const categoryFontColor = Color(0xff8469f8);
 const progressIndicatorColor = Color(0xff7455f7);
 const buttonColour = Color(0xff6f51eb);
 const playButtonColor = Color(0xffe6e1fa);
+const snackBarGreen = Color(0xfff1f8f4);
+// const snackBarRed=Color()
 
 class TColors {
   // App theme colors

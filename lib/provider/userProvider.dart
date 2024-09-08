@@ -13,6 +13,7 @@ class UserProvider with ChangeNotifier {
     enrolledCourses: [],
     savedCourses: [],
     phone: '',
+    token: '',
   );
 
   User get user => _user;
@@ -26,6 +27,13 @@ class UserProvider with ChangeNotifier {
     print("set user called in provider");
     _user = User.fromJson(user);
     print("after user called in provider");
+    notifyListeners();
+  }
+
+  void saveProfilePicture(String newProfilePicUrl) {
+    print("saveProfilePicture called in provider");
+    _user.profilePictureUrl = newProfilePicUrl;
+    print("Profile picture updated to: $newProfilePicUrl");
     notifyListeners();
   }
 
@@ -109,5 +117,33 @@ class UserProvider with ChangeNotifier {
 
     print("Course not found in enrolled courses: $courseId");
     return 0; // or another default value that indicates no progress
+  }
+
+  void clearData() {
+    print("clearData called in provider");
+    _user = User(
+      userName: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      enrolledCourses: [],
+      savedCourses: [],
+      phone: '',
+      token: '',
+    );
+    notifyListeners();
+  }
+
+  void updatePhoneNumber(String newPhoneNumber) {
+    print("updatePhoneNumber called in provider");
+
+    if (_user.phone != newPhoneNumber) {
+      _user.phone = newPhoneNumber;
+      print("Phone number updated to: $newPhoneNumber");
+      notifyListeners();
+    } else {
+      print("Phone number is the same, no update needed.");
+    }
   }
 }

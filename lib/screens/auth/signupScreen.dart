@@ -1,9 +1,11 @@
 import 'package:adhyayan/commons/formDivider.dart';
 import 'package:adhyayan/commons/socialButton.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../commons/color.dart';
+import '../../commons/utils.dart';
 import '../../services/AuthService.dart';
 
 class SignUp extends StatefulWidget {
@@ -16,18 +18,20 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _usernameController =
-      TextEditingController(); // Changed from _emailController
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
 
   final AuthService _authService = AuthService();
 
+  bool _isPrivacyPolicyAccepted = false;
+  bool _isPasswordVisible = false; // New state for password visibility
+
   InputDecoration inputDecoration({
     required String labelText,
     required Icon prefixIcon,
-    Icon? suffixIcon,
+    Widget? suffixIcon, // Change to Widget? to accept IconButton
   }) {
     return InputDecoration(
       errorMaxLines: 3,
@@ -75,8 +79,7 @@ class _SignUpState extends State<SignUp> {
   void _signUp() {
     final String firstName = _firstNameController.text.trim();
     final String lastName = _lastNameController.text.trim();
-    final String username =
-        _usernameController.text.trim(); // Changed from _emailController
+    final String username = _usernameController.text.trim();
     final String email = _emailController.text.trim();
     final String password = _passwordController.text.trim();
     final String phone = _phoneController.text.trim();
@@ -85,9 +88,24 @@ class _SignUpState extends State<SignUp> {
         username.isEmpty ||
         email.isEmpty ||
         password.isEmpty) {
-      // Added username check
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please fill all required fields')),
+      showCustomSnackBar(
+        context,
+        message: 'Please fill all required fields',
+        title: 'Incomplete Form',
+        isSuccess: false,
+        isWarning: true,
+      );
+      return;
+    }
+
+    if (!_isPrivacyPolicyAccepted) {
+      showCustomSnackBar(
+        context,
+        message:
+            'You must accept the Privacy Policy and Terms of Use to proceed',
+        title: 'Privacy Policy Not Accepted',
+        isSuccess: false,
+        isWarning: true,
       );
       return;
     }
@@ -95,7 +113,7 @@ class _SignUpState extends State<SignUp> {
     _authService.signUpUser(
       firstName: firstName,
       lastName: lastName,
-      userName: username, // Added username
+      userName: username,
       email: email,
       password: password,
       phone: phone,
@@ -103,13 +121,18 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
+  Future<void> loginWithGoogle() async {
+    AuthService authService = AuthService();
+    await authService.signinWithGoogle(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: backGroundColor,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(TSizes.defaultSpace),
+          padding: const EdgeInsets.all(TSizes.defaultSpace).copyWith(top: 85),
           child: Column(
             children: [
               Text(
@@ -120,9 +143,7 @@ class _SignUpState extends State<SignUp> {
                       color: TColors.dark,
                     ),
               ),
-              const SizedBox(
-                height: TSizes.spaceBtwSections + 25,
-              ),
+              const SizedBox(height: TSizes.spaceBtwSections + 25),
               Form(
                 child: Column(
                   children: [
@@ -153,8 +174,7 @@ class _SignUpState extends State<SignUp> {
                       height: TSizes.spaceBtwInputFields,
                     ),
                     TextFormField(
-                      controller:
-                          _usernameController, // Updated to use _usernameController
+                      controller: _usernameController,
                       decoration: inputDecoration(
                         labelText: "Username",
                         prefixIcon: const Icon(Iconsax.user_edit),
@@ -185,11 +205,23 @@ class _SignUpState extends State<SignUp> {
                     ),
                     TextFormField(
                       controller: _passwordController,
-                      obscureText: true,
+                      obscureText: !_isPasswordVisible, // Toggle visibility
                       decoration: inputDecoration(
                         labelText: "Password",
                         prefixIcon: const Icon(Iconsax.password_check),
-                        suffixIcon: const Icon(Iconsax.eye_slash),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _isPasswordVisible
+                                ? Iconsax.eye
+                                : Iconsax.eye_slash,
+                            color: TColors.darkGrey,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                        ),
                       ),
                     ),
                     const SizedBox(
@@ -201,8 +233,13 @@ class _SignUpState extends State<SignUp> {
                           width: 24,
                           height: 24,
                           child: Checkbox(
-                            value: true,
-                            onChanged: (value) {},
+                            value: _isPrivacyPolicyAccepted,
+                            activeColor: TColors.primary, // Match button color
+                            onChanged: (value) {
+                              setState(() {
+                                _isPrivacyPolicyAccepted = value ?? false;
+                              });
+                            },
                             checkColor: Colors.white,
                           ),
                         ),
@@ -248,7 +285,7 @@ class _SignUpState extends State<SignUp> {
                               ),
                             ],
                           ),
-                        )
+                        ),
                       ],
                     ),
                     const SizedBox(height: TSizes.spaceBtwSections),
@@ -264,11 +301,13 @@ class _SignUpState extends State<SignUp> {
                           disabledBackgroundColor: TColors.buttonDisabled,
                           side: const BorderSide(color: TColors.primary),
                           padding: const EdgeInsets.symmetric(
-                              vertical: TSizes.buttonHeight),
+                            vertical: TSizes.buttonHeight,
+                          ),
                           textStyle: const TextStyle(
-                              fontSize: 16,
-                              color: TColors.textWhite,
-                              fontWeight: FontWeight.w600),
+                            fontSize: 16,
+                            color: TColors.textWhite,
+                            fontWeight: FontWeight.w600,
+                          ),
                           shape: RoundedRectangleBorder(
                             borderRadius:
                                 BorderRadius.circular(TSizes.buttonRadius),
@@ -276,15 +315,15 @@ class _SignUpState extends State<SignUp> {
                         ),
                         child: const Text("Create Account"),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
               const formDivider(text: "Or Sign Up With"),
-              const SizedBox(
-                height: TSizes.spaceBtwSections - 25,
+              const SizedBox(height: TSizes.spaceBtwSections - 25),
+              SocialButton(
+                onTapGoogle: loginWithGoogle,
               ),
-              const SocialButton(),
             ],
           ),
         ),

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class SocialButton extends StatelessWidget {
+  final VoidCallback onTapGoogle;
+
   const SocialButton({
+    required this.onTapGoogle,
     super.key,
   });
 
@@ -16,7 +19,7 @@ class SocialButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(100),
           ),
           child: IconButton(
-            onPressed: () {},
+            onPressed: onTapGoogle, // Use the onTapGoogle callback here
             icon: const Image(
               width: 20,
               height: 20,

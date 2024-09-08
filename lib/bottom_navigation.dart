@@ -3,9 +3,12 @@ import 'package:adhyayan/screens/auth/profileScreen.dart';
 import 'package:adhyayan/screens/course/MyCourse.dart';
 import 'package:adhyayan/screens/course/savedCourse.dart';
 import 'package:adhyayan/screens/home/HomePage.dart';
+import 'package:adhyayan/screens/home/NavBar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+
+import 'commons/utils.dart';
 
 class BottomNavigation extends StatefulWidget {
   const BottomNavigation({super.key});
@@ -26,6 +29,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: NavBar(),
       backgroundColor: backGroundColor,
       body: Center(
         child: _getSelectedPage(_selectedIndex),
@@ -51,6 +55,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(35),
             child: NavigationBar(
+              // indicatorColor: buttonColour.withOpacity(0.1),
               backgroundColor: Colors.white,
               height: 60, // Adjusted height for better visibility
               selectedIndex: _selectedIndex,

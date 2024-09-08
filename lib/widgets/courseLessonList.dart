@@ -1,5 +1,6 @@
 import 'package:adhyayan/Data_Models/courseModel.dart';
 import 'package:adhyayan/commons/color.dart';
+import 'package:adhyayan/commons/utils.dart';
 import 'package:adhyayan/screens/course/videoPlayerScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,9 +11,11 @@ class CourseListItem extends StatefulWidget {
   final Course course;
   final int index;
   bool isEnrolled;
+  VoidCallback onTap;
 
   CourseListItem(
       {Key? key,
+      required this.onTap,
       required this.course,
       required this.isEnrolled,
       required this.index})
@@ -38,7 +41,18 @@ class _CourseListItemState extends State<CourseListItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: widget.isEnrolled ? getLessonVideo : () {},
+      onTap: widget.isEnrolled
+          ? widget.onTap
+          : () {
+              showCustomSnackBar(
+                context,
+                message:
+                    'Please purchase the course or complete the prior lesson to proceed.',
+                title: "Action Required",
+                isSuccess: false,
+                isWarning: true,
+              );
+            },
       child: Container(
         margin:
             const EdgeInsets.symmetric(vertical: 8), // Adjust margin as needed

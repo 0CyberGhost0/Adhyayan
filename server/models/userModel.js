@@ -22,13 +22,16 @@ const userSchema = mongoose.Schema({
       message: "Please enter a valid email address",
     },
   },
+  isGoogleLogin: {
+    type: Boolean,
+    default: false,
+  },
   password: {
     type: String,
-    required: true,
   },
   phone: {
     type: String,
-    required: true,
+    // required: true,
   },
   userType: {
     type: String,
@@ -65,13 +68,7 @@ const userSchema = mongoose.Schema({
       {
         courseId: {
           type: mongoose.Schema.Types.ObjectId,
-          unique:true,
           ref: 'Course',
-          required: true,
-        },
-        savedAt: {
-          type: Date,
-          default: Date.now,
         },
       },
     ],

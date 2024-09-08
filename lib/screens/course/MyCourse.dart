@@ -1,9 +1,7 @@
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
+import 'dart:collection';
 import '../../Data_Models/courseModel.dart';
 import '../../Data_Models/userModel.dart';
 import '../../commons/color.dart';
@@ -11,6 +9,7 @@ import '../../provider/userProvider.dart';
 import '../../services/CourseServices.dart';
 import '../../widgets/continueLearningCard.dart';
 import '../../widgets/continueLearningShimmer.dart';
+import 'courseDetailScreen.dart';
 
 class MyCoursePage extends StatefulWidget {
   const MyCoursePage({super.key});
@@ -35,16 +34,30 @@ class _MyCoursePageState extends State<MyCoursePage> {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     List<EnrolledCourse> enrolledCourses = userProvider.user.enrolledCourses;
 
+    // Use a map to track course IDs and their completed lesson numbers
+    Map<String, int> courseIdToLessonsCompleted = {};
+
     for (EnrolledCourse enrolledCourse in enrolledCourses) {
       String courseId = enrolledCourse.courseId;
       CourseServices courseServices = CourseServices();
       Course? course = await courseServices.getCourseById(courseId);
 
-      myCourses.remove(course); // Ensure no duplicates
-      myCourses[course] = enrolledCourse.completedLessonNo;
+      if (course != null) {
+        courseIdToLessonsCompleted[courseId] = enrolledCourse.completedLessonNo;
+      }
+    }
+
+    // Fetch all courses once and map them to lessons completed
+    LinkedHashMap<Course, int> tempCourses = LinkedHashMap<Course, int>();
+    for (var entry in courseIdToLessonsCompleted.entries) {
+      Course? course = await CourseServices().getCourseById(entry.key);
+      if (course != null) {
+        tempCourses[course] = entry.value;
+      }
     }
 
     setState(() {
+      myCourses = tempCourses;
       isLoading = false; // Update the loading state
       applySearchFilter(); // Apply search filter initially
     });
@@ -63,6 +76,18 @@ class _MyCoursePageState extends State<MyCoursePage> {
         );
       });
     }
+  }
+
+  void _navigateToCourseDetail(Course course) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CourseDetailScreen(course: course),
+      ),
+    );
+
+    // Fetch courses again after returning from CourseDetailScreen
+    fetchMyCourses();
   }
 
   @override
@@ -203,6 +228,9 @@ class _MyCoursePageState extends State<MyCoursePage> {
                           child: ContinueLearningCard(
                             course: course,
                             lessonsCompleted: lessonsCompleted,
+                            onTap: () {
+                              _navigateToCourseDetail(course);
+                            },
                           ),
                         ),
                       );

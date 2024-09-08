@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:adhyayan/Data_Models/courseModel.dart';
 import 'package:adhyayan/Data_Models/userModel.dart';
+import 'package:adhyayan/commons/utils.dart';
 import 'package:adhyayan/provider/userProvider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -235,10 +236,10 @@ class CourseServices {
         userProvider.enrollCourse(courseId);
         return true;
       } else {
-        return false;
         // Handle non-200 status codes
         print(
             'Failed to Enroll in Course detail. Status code: ${res.statusCode}');
+        return false;
       }
     } catch (err) {
       print(err);
@@ -248,21 +249,6 @@ class CourseServices {
 
   bool isEnrolled(BuildContext context, String courseId) {
     try {
-      // print("check enrolled");
-      // SharedPreferences sharedPreferences =
-      //     await SharedPreferences.getInstance();
-      // final String? token = sharedPreferences.getString("x-auth-token");
-      // http.Response res = await http.get(
-      //   Uri.parse('$URL/course/isEnrolled'),
-      //   headers: <String, String>{
-      //     'Content-Type': 'application/json; charset=UTF-8',
-      //     'courseId': courseId,
-      //     'x-auth-token': token!
-      //   },
-      // );
-      // print(res.body);
-      //
-      // return jsonDecode(res.body);
       final user = Provider.of<UserProvider>(context, listen: false).user;
       final enrolledCourses = user.enrolledCourses;
       for (EnrolledCourse enrolledCourse in enrolledCourses) {
@@ -308,6 +294,41 @@ class CourseServices {
       }
     } catch (err) {
       print("Updating completed lesson number error: $err");
+    }
+  }
+
+  Future<void> postCourse(BuildContext context, Course course) async {
+    try {
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      final String? token = sharedPreferences.getString("x-auth-token");
+
+      http.Response res = await http.post(
+        Uri.parse('$URL/course/addCourse'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token!,
+        },
+        body: jsonEncode(course),
+      );
+      if (res.statusCode == 200) {
+        Navigator.pop(context);
+        showCustomSnackBar(
+          context,
+          message: "The course has been successfully uploaded.",
+          title: "Upload Successful",
+          isSuccess: true,
+        );
+      } else {
+        showCustomSnackBar(
+          context,
+          message: "There was an error uploading the course. Please try again.",
+          title: "Upload Failed",
+          isSuccess: false,
+        );
+      }
+    } catch (err) {
+      print(err);
     }
   }
 }

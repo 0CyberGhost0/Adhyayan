@@ -1,10 +1,14 @@
+import 'package:adhyayan/screens/auth/forgotPasswordScreen.dart';
+import 'package:adhyayan/screens/auth/signupScreen.dart';
 import 'package:adhyayan/services/AuthService.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../commons/color.dart';
 import '../../commons/formDivider.dart';
 import '../../commons/socialButton.dart';
+import '../../commons/utils.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -43,9 +47,16 @@ class _LoginScreenState extends State<LoginScreen> {
     print('Password: $password');
   }
 
+  Future<void> loginWithGoogle() async {
+    AuthService authService = AuthService();
+
+    await authService.signinWithGoogle(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backGroundColor,
       body: SingleChildScrollView(
         child: Padding(
           padding:
@@ -235,7 +246,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             ],
                           ),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ForgotPassword()));
+                            },
                             child: const Text("Forget Password?"),
                           ),
                         ],
@@ -287,7 +303,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   BorderRadius.circular(TSizes.buttonRadius),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SignUp()));
+                          },
                           child: const Text("Create Account"),
                         ),
                       ),
@@ -296,7 +317,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               formDivider(text: 'or Sign In with'),
-              SocialButton(),
+              SocialButton(
+                onTapGoogle: loginWithGoogle,
+              ),
             ],
           ),
         ),

@@ -57,3 +57,4 @@ server/node_modules/
 
 # General node_modules for any folder
 node_modules/
+server/.env

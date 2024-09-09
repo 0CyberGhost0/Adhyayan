@@ -56,7 +56,8 @@ class AuthService {
           isSuccess: true,
         );
         OTPService otpService = OTPService();
-        otpService.getOTP(context, email);
+        await otpService.getOTP(context, email);
+
         Navigator.push(
             context,
             MaterialPageRoute(

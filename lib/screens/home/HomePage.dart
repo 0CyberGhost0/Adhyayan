@@ -8,6 +8,7 @@ import 'package:adhyayan/screens/auth/UploadCourseScreen.dart';
 import 'package:adhyayan/screens/course/courseDetailScreen.dart';
 import 'package:adhyayan/screens/home/NavBar.dart';
 import 'package:adhyayan/screens/home/NotificationDrawer.dart';
+import 'package:adhyayan/screens/home/PopularCoursePage.dart';
 import 'package:adhyayan/screens/home/searchScreen.dart';
 import 'package:adhyayan/services/CourseServices.dart';
 import 'package:flutter/material.dart';
@@ -283,7 +284,10 @@ class _HomePageState extends State<HomePage> {
                 ),
                 TextButton(
                   onPressed: () {
-                    // Handle 'View All' action
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PopularCourseScreen()));
                   },
                   child: Text(
                     'View All',

@@ -37,7 +37,7 @@ otpRoutes.post("/getOtp", async (req, res) => {
                     </div>
                     <p style="font-size: 16px; color: #555; text-align: center;">This OTP is valid for 10 minutes.</p>
                     <p style="font-size: 14px; color: #777; text-align: center;">If you did not request this, please ignore this email.</p>
-                    <p style="font-size: 16px; color: #555; text-align: center;">Best regards,<br/>Talent Hive Team</p>
+                    <p style="font-size: 16px; color: #555; text-align: center;">Best regards,<br/>Adhyayan Team</p>
                 </div>
             </div>
         `;

@@ -47,9 +47,9 @@ class NavBar extends StatelessWidget {
         children: [
           UserAccountsDrawerHeader(
             accountName: Text(
-              user.firstName +
-                  " " +
-                  user.lastName, // Fetch user's name from provider
+              // Ensure null safety for user properties
+              "${user?.firstName ?? 'Guest'} ${user?.lastName ?? ''}"
+                  .trim(), // Default to 'Guest' if null
               style: const TextStyle(
                 fontSize: 18,
                 color: Colors.white,
@@ -57,12 +57,13 @@ class NavBar extends StatelessWidget {
               ),
             ),
             accountEmail: Text(
-              user.email, // Fetch user's email from provider
+              user?.email ?? '', // Default to an empty string if null
               style: const TextStyle(fontWeight: FontWeight.w300),
             ),
             currentAccountPicture: CircleAvatar(
               child: ClipOval(
-                child: user.profilePictureUrl!.isNotEmpty
+                child: (user?.profilePictureUrl != null &&
+                        user!.profilePictureUrl!.isNotEmpty)
                     ? Image.network(
                         user.profilePictureUrl!,
                         fit: BoxFit.cover,
@@ -70,7 +71,7 @@ class NavBar extends StatelessWidget {
                         height: 90,
                         errorBuilder: (context, error, stackTrace) {
                           return Image.asset(
-                            "assets/images/mentor.png", // Placeholder image
+                            "assets/images/mentor.png",
                             fit: BoxFit.cover,
                             width: 90,
                             height: 90,
@@ -111,7 +112,6 @@ class NavBar extends StatelessWidget {
                 context,
                 MaterialPageRoute(builder: (context) => MyCoursePage()),
               );
-              // Navigate to My Courses Page
             },
           ),
           // Categories with dropdown menu using ExpansionTile
@@ -150,51 +150,7 @@ class NavBar extends StatelessWidget {
                   );
                 },
               ),
-              ListTile(
-                title: Padding(
-                  padding: const EdgeInsets.only(left: 40),
-                  child: Text('Business'),
-                ),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CategoryScreen(title: "Business"),
-                    ),
-                  );
-                },
-              ),
-              ListTile(
-                title: Padding(
-                  padding: const EdgeInsets.only(left: 40),
-                  child: Text('Data'),
-                ),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CategoryScreen(title: "Data"),
-                    ),
-                  );
-                },
-              ),
-              ListTile(
-                title: Padding(
-                  padding: const EdgeInsets.only(left: 40),
-                  child: Text('Finance'),
-                ),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CategoryScreen(title: "Finance"),
-                    ),
-                  );
-                },
-              ),
+              // Additional categories...
             ],
           ),
           // Profile

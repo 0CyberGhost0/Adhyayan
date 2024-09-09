@@ -4,9 +4,6 @@ const User=require("../models/userModel");
 const bcrypt=require("bcryptjs");
 const jwt=require("jsonwebtoken");
 const authMiddleWare=require("./middleware/authMiddleware");
-
-
-const {OAuth2Client}=require("google-auth-library");
 authRoutes.post("/signup", async (req, res) => {
     try {
       const { firstName, lastName, email, password,phone} = req.body;
@@ -22,7 +19,7 @@ authRoutes.post("/signup", async (req, res) => {
         }
         if (!existingUser.isVerified) {
             // Delete the existing unverified user
-            await existingUser.delete();
+            await existingUser.deleteOne();
         }
     }
   
@@ -56,6 +53,9 @@ authRoutes.post("/signup", async (req, res) => {
       
       const user = await User.findOne({ email });
       if (!user) {
+        return res.status(400).json({ error: "Invalid email or password" });
+      }
+      if (user.isVerified==false) {
         return res.status(400).json({ error: "Invalid email or password" });
       }
       if(user.isGoogleLogin) return res.status(400).json({error:"Login with Google to Continue"});

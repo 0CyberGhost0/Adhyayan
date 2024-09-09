@@ -4,7 +4,9 @@ import 'package:adhyayan/bottom_navigation.dart';
 import 'package:adhyayan/commons/constants.dart';
 import 'package:adhyayan/commons/utils.dart';
 import 'package:adhyayan/screens/auth/changePassScreen.dart';
+import 'package:adhyayan/screens/auth/loginScreen.dart';
 import 'package:adhyayan/screens/home/HomePage.dart';
+import 'package:adhyayan/services/AuthService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -28,6 +30,7 @@ class OTPService {
         );
         return false;
       }
+
       return true;
 
       print(res.body);
@@ -61,7 +64,7 @@ class OTPService {
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                builder: (context) => BottomNavigation(),
+                builder: (context) => LoginScreen(),
               ),
               (Route<dynamic> route) => false);
         } else {

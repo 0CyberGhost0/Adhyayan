@@ -1,43 +1,59 @@
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
-.DS_Store
-.atom/
-.buildlog/
-.history
-.svn/
-migrate_working_dir/
-
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
-.idea/
-
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
-
-# Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
+# Flutter/Dart specific
 .dart_tool/
+.buildlog/
 .flutter-plugins
 .flutter-plugins-dependencies
+.packages
 .pub-cache/
 .pub/
 /build/
+.cobertura/
 
-# Symbolication related
-app.*.symbols
+# Ignore IntelliJ / Android Studio related files
+.idea/
+*.iml
 
-# Obfuscation related
-app.*.map.json
+# VS Code specific
+.vscode/
+*.code-workspace
 
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
+# macOS/Windows/Linux build files
+macos/Flutter/ephemeral/
+windows/Flutter/ephemeral/
+linux/Flutter/ephemeral/
+
+# iOS build files
+ios/Flutter/Flutter.framework/
+ios/.generated/
+ios/Pods/
+ios/Podfile.lock
+ios/Runner.xcworkspace/
+ios/Runner/GeneratedPluginRegistrant.*
+
+# Android build files
+android/.gradle/
+android/app/build/
+android/local.properties
+android/app/*.keystore
+
+# Firebase related files
+firebase_app_id_file.json
+
+# Keys and environment files
+*.key
+.env
+*.pem
+
+# Debug files
+debug/
+.dart_tool/
+logs/
+
+# Generated plugin registrants
+*.g.dart
+
+# Node.js specific
+server/node_modules/
+
+# General node_modules for any folder
+node_modules/

@@ -20,3 +20,4 @@ app.use("/otp",otpRoutes);
 app.listen(PORT,async(req,res)=>{
     console.log(`Listening on Port ${PORT}`);
 });
+module.exports = app;

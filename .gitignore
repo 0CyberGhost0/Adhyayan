@@ -6,7 +6,6 @@
 .packages
 .pub-cache/
 .pub/
-/build/
 .cobertura/
 
 # Ignore IntelliJ / Android Studio related files

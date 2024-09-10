@@ -50,7 +50,7 @@ otpRoutes.post("/getOtp", async (req, res) => {
 
         await newOtp.save();
         console.log(otp);
-        // await sendMail(email, "Welcome to Adhyayan: Your Account Has Been Successfully Created", htmlMessage);
+         await sendMail(email, "Welcome to Adhyayan ,Your Account Has Been Successfully Created", htmlMessage);
         res.status(200).json({ msg: "Email Sent Successfully" });
     } catch (err) {
         console.log(err);

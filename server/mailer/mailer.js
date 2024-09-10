@@ -21,7 +21,7 @@ const sendMail=async(email,subject,content)=>{
             html:content
         };
          // Await the sendMail function
-                let info = await transporter.sendMail(mailOptions);
+                let info = await transporter.sendMail(mailOption);
 
                 // Log the messageId to confirm that the mail has been sent
                 console.log("Mail Sent:", info.messageId);

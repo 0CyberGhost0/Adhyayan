@@ -35,8 +35,6 @@ android/app/build/
 android/local.properties
 android/app/*.keystore
 
-# Firebase related files
-firebase_app_id_file.json
 
 # Keys and environment files
 *.key

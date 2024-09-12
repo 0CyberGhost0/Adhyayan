@@ -43,12 +43,12 @@ class NavBar extends StatelessWidget {
     return CustomDrawer(
       width: 270, // Set your desired width here
       child: ListView(
-        padding: EdgeInsets.all(0),
+        padding: const EdgeInsets.all(0),
         children: [
           UserAccountsDrawerHeader(
             accountName: Text(
               // Ensure null safety for user properties
-              "${user?.firstName ?? 'Guest'} ${user?.lastName ?? ''}"
+              "${user.firstName} ${user.lastName}"
                   .trim(), // Default to 'Guest' if null
               style: const TextStyle(
                 fontSize: 18,
@@ -57,13 +57,13 @@ class NavBar extends StatelessWidget {
               ),
             ),
             accountEmail: Text(
-              user?.email ?? '', // Default to an empty string if null
+              user.email, // Default to an empty string if null
               style: const TextStyle(fontWeight: FontWeight.w300),
             ),
             currentAccountPicture: CircleAvatar(
               child: ClipOval(
-                child: (user?.profilePictureUrl != null &&
-                        user!.profilePictureUrl!.isNotEmpty)
+                child: (user.profilePictureUrl != null &&
+                        user.profilePictureUrl!.isNotEmpty)
                     ? Image.network(
                         user.profilePictureUrl!,
                         fit: BoxFit.cover,
@@ -95,8 +95,8 @@ class NavBar extends StatelessWidget {
           ),
           // Home
           ListTile(
-            leading: Icon(Iconsax.home),
-            title: Text("Home"),
+            leading: const Icon(Iconsax.home),
+            title: const Text("Home"),
             onTap: () {
               Navigator.of(context).pop();
               // Navigate to Home Page
@@ -104,25 +104,25 @@ class NavBar extends StatelessWidget {
           ),
           // My Courses
           ListTile(
-            leading: Icon(Iconsax.shop),
-            title: Text("My Courses"),
+            leading: const Icon(Iconsax.shop),
+            title: const Text("My Courses"),
             onTap: () {
               Navigator.of(context).pop();
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MyCoursePage()),
+                MaterialPageRoute(builder: (context) => const MyCoursePage()),
               );
             },
           ),
           // Categories with dropdown menu using ExpansionTile
           ExpansionTile(
             showTrailingIcon: false,
-            leading: Icon(Iconsax.category),
-            title: Text("Categories"),
+            leading: const Icon(Iconsax.category),
+            title: const Text("Categories"),
             children: [
               ListTile(
-                title: Padding(
-                  padding: const EdgeInsets.only(left: 40),
+                title: const Padding(
+                  padding: EdgeInsets.only(left: 40),
                   child: Text('Design'),
                 ),
                 onTap: () {
@@ -130,14 +130,15 @@ class NavBar extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CategoryScreen(title: "Design"),
+                      builder: (context) =>
+                          const CategoryScreen(title: "Design"),
                     ),
                   );
                 },
               ),
               ListTile(
-                title: Padding(
-                  padding: const EdgeInsets.only(left: 40),
+                title: const Padding(
+                  padding: EdgeInsets.only(left: 40),
                   child: Text('Code'),
                 ),
                 onTap: () {
@@ -145,7 +146,7 @@ class NavBar extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CategoryScreen(title: "Code"),
+                      builder: (context) => const CategoryScreen(title: "Code"),
                     ),
                   );
                 },
@@ -155,20 +156,20 @@ class NavBar extends StatelessWidget {
           ),
           // Profile
           ListTile(
-            leading: Icon(Iconsax.user),
-            title: Text("Profile"),
+            leading: const Icon(Iconsax.user),
+            title: const Text("Profile"),
             onTap: () {
               Navigator.of(context).pop();
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => ProfileScreen()),
+                MaterialPageRoute(builder: (context) => const ProfileScreen()),
               );
             },
           ),
           // Become a Mentor
           ListTile(
-            leading: Icon(Iconsax.teacher),
-            title: Text("Become a Mentor"),
+            leading: const Icon(Iconsax.teacher),
+            title: const Text("Become a Mentor"),
             onTap: () {
               Navigator.of(context).pop();
               Navigator.push(
@@ -177,14 +178,14 @@ class NavBar extends StatelessWidget {
               );
             },
           ),
-          Divider(),
+          const Divider(),
           // Logout
           ListTile(
-            leading: Icon(
+            leading: const Icon(
               Iconsax.logout,
               color: Colors.red,
             ),
-            title: Text(
+            title: const Text(
               "Logout",
               style: TextStyle(color: Colors.red, fontWeight: FontWeight.w500),
             ),
@@ -195,7 +196,7 @@ class NavBar extends StatelessWidget {
               Provider.of<UserProvider>(context, listen: false).clearData();
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
                 (Route<dynamic> route) => false,
               );
             },

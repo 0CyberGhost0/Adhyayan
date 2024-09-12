@@ -2,13 +2,11 @@ import 'package:adhyayan/screens/auth/forgotPasswordScreen.dart';
 import 'package:adhyayan/screens/auth/signupScreen.dart';
 import 'package:adhyayan/services/AuthService.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../commons/color.dart';
 import '../../commons/formDivider.dart';
 import '../../commons/socialButton.dart';
-import '../../commons/utils.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,6 +16,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool isChecked = true;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
@@ -41,10 +40,6 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
     _authService.logInUser(email: email, password: password, context: context);
-    // Add your login logic here
-    // For example, you can print the values or send them to your backend
-    print('Email: $email');
-    print('Password: $password');
   }
 
   Future<void> loginWithGoogle() async {
@@ -63,14 +58,14 @@ class _LoginScreenState extends State<LoginScreen> {
               const EdgeInsets.only(top: 56, right: 24, left: 24, bottom: 24),
           child: Column(
             children: [
-              Column(
+              const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Image(
-                    height: 150,
-                    image: AssetImage("assets/images/Business.png"),
-                  ),
-                  const SizedBox(height: 10),
+                  // const Image(
+                  //   height: 150,
+                  //   image: AssetImage("assets/images/newimage.jpg"),
+                  // ),
+                  SizedBox(height: 140),
                   Text(
                     'Welcome Back,',
                     style: TextStyle(
@@ -79,15 +74,18 @@ class _LoginScreenState extends State<LoginScreen> {
                       color: TColors.dark,
                     ),
                   ),
-                  const SizedBox(height: 30),
+                  SizedBox(height: 30),
                   Text(
-                    'Discover limitless Choices and Unmatched Convenience.',
+                    'Master the Skills of Tomorrow, Today – Your Journey to Excellence Starts Here.',
                     style: TextStyle(
                       fontSize: 19.0,
                       fontWeight: FontWeight.w500,
                       color: TColors.dark,
                     ),
                   ),
+                  SizedBox(
+                    height: 10,
+                  )
                 ],
               ),
               Form(
@@ -101,16 +99,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           errorMaxLines: 3,
                           prefixIconColor: TColors.darkGrey,
                           suffixIconColor: TColors.darkGrey,
-                          labelStyle: TextStyle(
+                          labelStyle: const TextStyle(
                             fontSize: TSizes.fontSizeMd,
                             color: TColors.black,
                             fontWeight: FontWeight.bold,
                           ),
-                          hintStyle: TextStyle(
+                          hintStyle: const TextStyle(
                             fontSize: TSizes.fontSizeSm,
                             color: TColors.black,
                           ),
-                          errorStyle: TextStyle(
+                          errorStyle: const TextStyle(
                             fontStyle: FontStyle.normal,
                           ),
                           floatingLabelStyle: TextStyle(
@@ -120,33 +118,33 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius:
                                 BorderRadius.circular(TSizes.inputFieldRadius),
                             borderSide:
-                                BorderSide(width: 1, color: TColors.grey),
+                                const BorderSide(width: 1, color: TColors.grey),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.circular(TSizes.inputFieldRadius),
                             borderSide:
-                                BorderSide(width: 1, color: TColors.grey),
+                                const BorderSide(width: 1, color: TColors.grey),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.circular(TSizes.inputFieldRadius),
                             borderSide:
-                                BorderSide(width: 1, color: TColors.dark),
+                                const BorderSide(width: 1, color: TColors.dark),
                           ),
                           errorBorder: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.circular(TSizes.inputFieldRadius),
-                            borderSide:
-                                BorderSide(width: 1, color: TColors.warning),
+                            borderSide: const BorderSide(
+                                width: 1, color: TColors.warning),
                           ),
                           focusedErrorBorder: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.circular(TSizes.inputFieldRadius),
-                            borderSide:
-                                BorderSide(width: 2, color: TColors.warning),
+                            borderSide: const BorderSide(
+                                width: 2, color: TColors.warning),
                           ),
-                          prefixIcon: Icon(Iconsax.direct_right),
+                          prefixIcon: const Icon(Iconsax.direct_right),
                           labelText: "E-mail",
                         ),
                       ),
@@ -158,16 +156,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           errorMaxLines: 3,
                           prefixIconColor: TColors.darkGrey,
                           suffixIconColor: TColors.darkGrey,
-                          labelStyle: TextStyle(
+                          labelStyle: const TextStyle(
                             fontSize: TSizes.fontSizeMd,
                             color: TColors.black,
                             fontWeight: FontWeight.bold,
                           ),
-                          hintStyle: TextStyle(
+                          hintStyle: const TextStyle(
                             fontSize: TSizes.fontSizeSm,
                             color: TColors.black,
                           ),
-                          errorStyle: TextStyle(
+                          errorStyle: const TextStyle(
                             fontStyle: FontStyle.normal,
                           ),
                           floatingLabelStyle: TextStyle(
@@ -177,33 +175,33 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius:
                                 BorderRadius.circular(TSizes.inputFieldRadius),
                             borderSide:
-                                BorderSide(width: 1, color: TColors.grey),
+                                const BorderSide(width: 1, color: TColors.grey),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.circular(TSizes.inputFieldRadius),
                             borderSide:
-                                BorderSide(width: 1, color: TColors.grey),
+                                const BorderSide(width: 1, color: TColors.grey),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.circular(TSizes.inputFieldRadius),
                             borderSide:
-                                BorderSide(width: 1, color: TColors.dark),
+                                const BorderSide(width: 1, color: TColors.dark),
                           ),
                           errorBorder: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.circular(TSizes.inputFieldRadius),
-                            borderSide:
-                                BorderSide(width: 1, color: TColors.warning),
+                            borderSide: const BorderSide(
+                                width: 1, color: TColors.warning),
                           ),
                           focusedErrorBorder: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.circular(TSizes.inputFieldRadius),
-                            borderSide:
-                                BorderSide(width: 2, color: TColors.warning),
+                            borderSide: const BorderSide(
+                                width: 2, color: TColors.warning),
                           ),
-                          prefixIcon: Icon(Iconsax.password_check),
+                          prefixIcon: const Icon(Iconsax.password_check),
                           labelText: "Password",
                           suffixIcon: IconButton(
                             icon: Icon(
@@ -226,17 +224,23 @@ class _LoginScreenState extends State<LoginScreen> {
                           Row(
                             children: [
                               Checkbox(
-                                value: true,
-                                onChanged: (value) {},
+                                value: isChecked,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isChecked = value ?? false;
+                                  });
+                                  // Handle change in checkbox value
+                                },
                                 shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(TSizes.xs),
+                                  borderRadius: BorderRadius.circular(TSizes
+                                      .xs), // Assuming TSizes.xs is defined
                                 ),
-                                checkColor: Colors.black,
+                                checkColor: Colors.white,
                                 fillColor:
                                     WidgetStateProperty.resolveWith((states) {
                                   if (states.contains(WidgetState.selected)) {
-                                    return TColors.primary;
+                                    return TColors
+                                        .primary; // Use your custom primary color
                                   } else {
                                     return Colors.transparent;
                                   }
@@ -250,7 +254,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => ForgotPassword()));
+                                      builder: (context) =>
+                                          const ForgotPassword()));
                             },
                             child: const Text("Forget Password?"),
                           ),
@@ -266,10 +271,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             backgroundColor: TColors.primary,
                             disabledForegroundColor: TColors.darkGrey,
                             disabledBackgroundColor: TColors.buttonDisabled,
-                            side: BorderSide(color: TColors.primary),
-                            padding: EdgeInsets.symmetric(
+                            side: const BorderSide(color: TColors.primary),
+                            padding: const EdgeInsets.symmetric(
                                 vertical: TSizes.buttonHeight),
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               fontSize: 16,
                               color: TColors.textWhite,
                               fontWeight: FontWeight.w600,
@@ -290,13 +295,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: OutlinedButton.styleFrom(
                             elevation: 0,
                             foregroundColor: TColors.dark,
-                            side: BorderSide(color: TColors.borderPrimary),
-                            textStyle: TextStyle(
+                            side:
+                                const BorderSide(color: TColors.borderPrimary),
+                            textStyle: const TextStyle(
                               fontSize: 16,
                               color: TColors.black,
                               fontWeight: FontWeight.w600,
                             ),
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: TSizes.buttonHeight, horizontal: 20),
                             shape: RoundedRectangleBorder(
                               borderRadius:
@@ -307,7 +313,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => SignUp()));
+                                    builder: (context) => const SignUp()));
                           },
                           child: const Text("Create Account"),
                         ),
@@ -316,7 +322,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              formDivider(text: 'or Sign In with'),
+              const formDivider(text: 'or Sign In with'),
               SocialButton(
                 onTapGoogle: loginWithGoogle,
               ),

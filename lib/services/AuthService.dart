@@ -4,10 +4,8 @@ import 'package:adhyayan/commons/constants.dart';
 import 'package:adhyayan/commons/utils.dart';
 import 'package:adhyayan/screens/auth/loginScreen.dart';
 import 'package:adhyayan/screens/auth/verify_email.dart';
-import 'package:adhyayan/screens/home/HomePage.dart';
 import 'package:adhyayan/services/OTPServices.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Data_Models/userModel.dart';
@@ -38,7 +36,6 @@ class AuthService {
           enrolledCourses: [],
           savedCourses: [],
           token: '');
-      print(user.toJson());
       http.Response res = await http.post(
         Uri.parse('$URL/auth/signup'),
         body: user.toJson(),
@@ -46,15 +43,8 @@ class AuthService {
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
-      print(res.body);
       if (res.statusCode == 200) {
         // Show success snack bar
-        showCustomSnackBar(
-          context,
-          message: 'Account created successfully! Please verify your email.',
-          title: 'Sign-Up Successful',
-          isSuccess: true,
-        );
         OTPService otpService = OTPService();
         await otpService.getOTP(context, email);
 
@@ -69,13 +59,13 @@ class AuthService {
         // Show error snack bar
         showCustomSnackBar(
           context,
-          message: 'Failed to create account. Try again.',
+          message:
+              'Failed to create account. Try again. ${jsonDecode(res.body)['error']}',
           title: 'Sign-Up Failed',
           isSuccess: false,
         );
       }
     } catch (e) {
-      print(e);
       // Show error snack bar
       showCustomSnackBar(
         context,
@@ -93,7 +83,6 @@ class AuthService {
     required BuildContext context,
   }) async {
     try {
-      print("inside login");
       http.Response res = await http.post(
         Uri.parse("$URL/auth/login"),
         body: jsonEncode({"email": email, "password": password}),
@@ -101,7 +90,6 @@ class AuthService {
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
-      print(res.body);
       if (res.statusCode == 200) {
         SharedPreferences sharedPreferences =
             await SharedPreferences.getInstance();
@@ -118,7 +106,7 @@ class AuthService {
         );
 
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => BottomNavigation()));
+            MaterialPageRoute(builder: (context) => const BottomNavigation()));
       } else {
         // Show error snack bar
         showCustomSnackBar(
@@ -128,9 +116,7 @@ class AuthService {
           isSuccess: false,
         );
       }
-      print(res.statusCode);
     } catch (err) {
-      print(err);
       // Show error snack bar
       showCustomSnackBar(
         context,
@@ -146,25 +132,20 @@ class AuthService {
     required BuildContext context,
   }) async {
     try {
-      print("inside get data");
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
       String? token = sharedPreferences.getString("x-auth-token");
-      print(token);
       if (token == null || token.isEmpty) {
         sharedPreferences.setString('x-auth-token', "");
       }
-      print("after set string");
       http.Response res = await http.post(Uri.parse("$URL/auth/isTokenValid"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             "x-auth-token": token!
           });
       var response = jsonDecode(res.body);
-      print(res.body);
 
       if (response == true) {
-        print("Token: ${token}");
         http.Response userData = await http.get(
           Uri.parse("$URL/auth/getData"),
           headers: <String, String>{
@@ -172,17 +153,10 @@ class AuthService {
             "x-auth-token": token
           },
         );
-        print(userData.body);
-        print("object set");
         var userProvider = Provider.of<UserProvider>(context, listen: false);
-        print("before set");
-        print(userData.body);
         userProvider.setUser(userData.body);
-        print("after set");
       }
-    } catch (err) {
-      print(err);
-    }
+    } catch (err) {}
   }
 
   Future<void> signOutWithGoogle(BuildContext context) async {
@@ -199,16 +173,20 @@ class AuthService {
   ) async {
     try {
       // googleSignIn.signOut();
+      print("inside signin");
       await signOutWithGoogle(context);
       final GoogleSignIn googleSignIn = GoogleSignIn(
         scopes: ['email', 'profile', 'openid'],
       );
+      print("after scope ");
+
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      print("after google user ");
+
       if (googleUser != null) {
         final email = googleUser.email;
         final displayName = googleUser.displayName;
         final photoUrl = googleUser.photoUrl;
-        print(photoUrl);
         http.Response res = await http.post(
           Uri.parse('$URL/auth/google-signin'),
           body: jsonEncode({
@@ -220,7 +198,6 @@ class AuthService {
             'Content-Type': 'application/json; charset=UTF-8',
           },
         );
-        print(res.body);
 
         if (res.statusCode == 200) {
           SharedPreferences sharedPreferences =
@@ -239,7 +216,7 @@ class AuthService {
 
           Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => BottomNavigation()),
+              MaterialPageRoute(builder: (context) => const BottomNavigation()),
               (Route<dynamic> route) => false);
         } else {
           // Show error snack bar
@@ -256,7 +233,7 @@ class AuthService {
       // Show error snack bar
       showCustomSnackBar(
         context,
-        message: 'An error occurred. Please try again.',
+        message: 'An error occurred. Please try again. ${err}',
         title: 'Error',
         isSuccess: false,
       );
@@ -277,7 +254,6 @@ class AuthService {
           "email": email,
         }),
       );
-      print(res.body);
       if (res.statusCode == 200) {
         // Show success snack bar
         showCustomSnackBar(
@@ -288,7 +264,7 @@ class AuthService {
         );
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => LoginScreen()),
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
             (Route<dynamic> route) => false);
       } else {
         // Show error snack bar
@@ -300,7 +276,6 @@ class AuthService {
         );
       }
     } catch (err) {
-      print(err);
       // Show error snack bar
       showCustomSnackBar(
         context,
@@ -348,7 +323,6 @@ class AuthService {
         );
       }
     } catch (err) {
-      print(err);
       // Show error snack bar
       showCustomSnackBar(
         context,
@@ -396,7 +370,6 @@ class AuthService {
         );
       }
     } catch (err) {
-      print(err);
       // Show error snack bar
       showCustomSnackBar(
         context,

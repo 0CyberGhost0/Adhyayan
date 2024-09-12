@@ -30,17 +30,16 @@ class ResetPasswordScreen extends StatelessWidget {
                     ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: TSizes.spaceBtwItems + 10),
-              Text(
+              const SizedBox(height: TSizes.spaceBtwItems + 10),
+              const Text(
                 "Your Account Security is our priority! We've sent You a Secure Link to safely change your Password and keep Your Account Protected",
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: TSizes.spaceBtwItems + 10),
+              const SizedBox(height: TSizes.spaceBtwItems + 10),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {},
-                  child: Text("Done"),
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
                     foregroundColor: TColors.light,
@@ -58,16 +57,17 @@ class ResetPasswordScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(TSizes.buttonRadius),
                     ),
                   ),
+                  child: const Text("Done"),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: TSizes.spaceBtwSections,
               ),
               SizedBox(
                 width: double.infinity,
                 child: TextButton(
                   onPressed: () {},
-                  child: Text("Resend Email "),
+                  child: const Text("Resend Email "),
                 ),
               ),
             ],

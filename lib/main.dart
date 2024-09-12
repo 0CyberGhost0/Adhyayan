@@ -1,14 +1,8 @@
 import 'package:adhyayan/bottom_navigation.dart';
 import 'package:adhyayan/provider/notficationProvider.dart';
 import 'package:adhyayan/provider/userProvider.dart';
-import 'package:adhyayan/screens/auth/UploadCourseScreen.dart';
 // Import the notification provider
-import 'package:adhyayan/screens/auth/forgotPasswordScreen.dart';
 import 'package:adhyayan/screens/auth/loginScreen.dart';
-import 'package:adhyayan/screens/auth/signupScreen.dart';
-import 'package:adhyayan/screens/auth/verify_email.dart';
-import 'package:adhyayan/screens/course/videoPlayerScreen.dart';
-import 'package:adhyayan/screens/home/HomePage.dart';
 import 'package:adhyayan/screens/onboarding/splashScreen.dart';
 import 'package:adhyayan/services/AuthService.dart';
 
@@ -81,8 +75,8 @@ class _AdhyayanAppState extends State<AdhyayanApp> {
       home: _isLoading
           ? const SplashScreen() // Display the SplashScreen while loading
           : Provider.of<UserProvider>(context).user.token.isNotEmpty
-              ? BottomNavigation()
-              : LoginScreen(),
+              ? const BottomNavigation()
+              : const LoginScreen(),
     );
   }
 }

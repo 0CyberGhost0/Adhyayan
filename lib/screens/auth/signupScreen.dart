@@ -1,7 +1,6 @@
 import 'package:adhyayan/commons/formDivider.dart';
 import 'package:adhyayan/commons/socialButton.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../commons/color.dart';

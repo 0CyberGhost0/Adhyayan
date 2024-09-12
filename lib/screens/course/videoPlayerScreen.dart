@@ -4,15 +4,13 @@ import 'package:adhyayan/services/CourseServices.dart';
 import 'package:adhyayan/widgets/mentorCard.dart';
 import 'package:appinio_video_player/appinio_video_player.dart';
 import 'package:flutter/material.dart';
+// import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:cached_video_player/cached_video_player.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
 import '../../Data_Models/notificationModel.dart';
 import '../../provider/notficationProvider.dart';
-import '../../widgets/courseLessonList.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
   final Course course;
@@ -27,7 +25,7 @@ class VideoPlayerScreen extends StatefulWidget {
 
 class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   late CustomVideoPlayerController _customVideoPlayerController;
-  late CachedVideoPlayerController _videoPlayerController;
+  late CachedVideoPlayerPlusController _videoPlayerController;
   bool _videoLoadError = false;
   bool _isCompleted = false;
 
@@ -48,8 +46,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       "https://res.cloudinary.com/dxa9xqx3t/video/upload/v1724822198/sampleVideo/SampleVideo_bohfbx.mp4";
 
   void initializeVideoPlayer() {
-    _videoPlayerController = CachedVideoPlayerController.network(
-        widget.course.lessons[widget.index].url)
+    _videoPlayerController = CachedVideoPlayerPlusController.networkUrl(
+        Uri.parse(widget.course.lessons[widget.index].url))
       ..initialize().then((_) {
         if (mounted) {
           setState(() {});
@@ -91,9 +89,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     });
 
     _customVideoPlayerController = CustomVideoPlayerController(
-      customVideoPlayerSettings: CustomVideoPlayerSettings(
-        allowVolumeOnSlide: true,
-      ),
+      customVideoPlayerSettings: const CustomVideoPlayerSettings(
+          // allowVolumeOnSlide: true,
+          ),
       context: context,
       videoPlayerController: _videoPlayerController,
     );
@@ -133,7 +131,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
               height: 200,
               margin: const EdgeInsets.only(bottom: 20),
               child: _videoLoadError
-                  ? Center(
+                  ? const Center(
                       child: Text(
                         'Failed to load video. Please check your connection.',
                         style: TextStyle(color: Colors.red, fontSize: 16),

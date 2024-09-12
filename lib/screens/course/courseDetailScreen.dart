@@ -9,7 +9,6 @@ import 'package:adhyayan/services/CourseServices.dart';
 import 'package:adhyayan/widgets/courseLessonList.dart';
 import 'package:adhyayan/widgets/EnrollButton.dart';
 import 'package:adhyayan/widgets/mentorCard.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';

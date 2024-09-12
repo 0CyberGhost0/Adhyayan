@@ -25,7 +25,7 @@ class ForgotPassVerifyEmail extends StatelessWidget {
           padding: const EdgeInsets.all(TSizes.defaultSpace),
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 70,
               ),
               // Image
@@ -65,8 +65,6 @@ class ForgotPassVerifyEmail extends StatelessWidget {
                 showFieldAsBox: true,
                 fieldWidth: 40.0,
                 onSubmit: (String otp) {
-                  // Handle the OTP submission here
-                  print(otp);
                   OTP = otp;
                   verifyOTP();
                 },

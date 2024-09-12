@@ -5,12 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:video_player/video_player.dart';
 import 'dart:io';
 import '../../commons/color.dart';
 
 import '../../commons/utils.dart';
-import '../../widgets/categoryIcon.dart'; // Ensure you have this widget or adapt it if necessary
+// Ensure you have this widget or adapt it if necessary
 
 class UploadCoursePage extends StatefulWidget {
   @override
@@ -173,7 +172,7 @@ class _UploadCoursePageState extends State<UploadCoursePage> {
                     ),
                     const SizedBox(height: 10),
                     if (_isUploading)
-                      Center(child: CircularProgressIndicator()),
+                      const Center(child: CircularProgressIndicator()),
                   ],
                 ),
               ),
@@ -253,13 +252,7 @@ class _UploadCoursePageState extends State<UploadCoursePage> {
 
   void _submitCourse() {
     // Validate that all necessary fields are filled
-    print('Course Title: ${_courseTitleController.text}');
-    print('Course Description: ${_courseDescriptionController.text}');
 
-    print('Price: ${_priceController.text}');
-    print('Category: ${_categoryController.text}');
-    print('Lessons: $_lessons');
-    print("LESSON LENGTH: ${_lessons.length}");
     if (_courseTitleController.text.isEmpty ||
         _courseDescriptionController.text.isEmpty ||
         _priceController.text.isEmpty ||
@@ -268,7 +261,7 @@ class _UploadCoursePageState extends State<UploadCoursePage> {
         thumbnailUrl.isEmpty) {
       // Show a snackbar or dialog if any required field is empty
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
             content:
                 Text('Please fill in all required fields and add lessons')),
       );
@@ -281,17 +274,12 @@ class _UploadCoursePageState extends State<UploadCoursePage> {
       price = double.parse(_priceController.text);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please enter a valid price')),
+        const SnackBar(content: Text('Please enter a valid price')),
       );
       return;
     }
 
     // Log the data for debugging purposes (can be removed in production)
-    print('Course Title: ${_courseTitleController.text}');
-    print('Course Description: ${_courseDescriptionController.text}');
-    print('Price: ${_priceController.text}');
-    print('Category: ${_categoryController.text}');
-    print('Lessons: $_lessons');
 
     // Create the course object
     Course course = Course(
@@ -307,7 +295,6 @@ class _UploadCoursePageState extends State<UploadCoursePage> {
       category: _categoryController.text, lessons: _lessons,
       // lessons: _lessons,
     );
-    print(course.toJson());
 
     // Call the CourseServices to post the course
     CourseServices courseServices = CourseServices();
@@ -358,7 +345,7 @@ class _UploadCoursePageState extends State<UploadCoursePage> {
                   child: DottedBorder(
                     color: Colors.grey,
                     strokeWidth: 2,
-                    dashPattern: [8, 4],
+                    dashPattern: const [8, 4],
                     borderType: BorderType.RRect,
                     radius: const Radius.circular(12),
                     child: Container(

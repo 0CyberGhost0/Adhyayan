@@ -3,7 +3,6 @@ import 'package:adhyayan/Data_Models/userModel.dart';
 
 import 'package:adhyayan/commons/color.dart';
 import 'package:adhyayan/provider/userProvider.dart';
-import 'package:adhyayan/screens/auth/UploadCourseScreen.dart';
 
 import 'package:adhyayan/screens/course/courseDetailScreen.dart';
 import 'package:adhyayan/screens/home/NavBar.dart';
@@ -14,7 +13,6 @@ import 'package:adhyayan/services/CourseServices.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 
 import '../../provider/notficationProvider.dart';
 import '../../widgets/PopularCardShimmer.dart';
@@ -24,6 +22,8 @@ import '../../widgets/continueLearningShimmer.dart';
 import '../../widgets/popularCourse.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -89,7 +89,6 @@ class _HomePageState extends State<HomePage> {
         isLoading = false;
       });
     } catch (error) {
-      print('Failed to fetch popular courses: $error');
       if (!mounted) return; // Check if the widget is still mounted
       setState(() {
         isLoading = false;
@@ -99,11 +98,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final notificationProvider = Provider.of<NotificationProvider>(context);
-
     return Scaffold(
       key: _scaffoldKey,
-      drawer: NavBar(),
+      drawer: const NavBar(),
       backgroundColor: backGroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -287,7 +284,7 @@ class _HomePageState extends State<HomePage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => PopularCourseScreen()));
+                            builder: (context) => const PopularCourseScreen()));
                   },
                   child: Text(
                     'View All',

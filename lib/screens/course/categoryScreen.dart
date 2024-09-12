@@ -5,7 +5,6 @@ import 'package:adhyayan/widgets/CourseCard.dart';
 import 'package:adhyayan/widgets/CourseCardShimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shimmer/shimmer.dart';
 
 class CategoryScreen extends StatefulWidget {
   final String title;

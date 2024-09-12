@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SearchScreen extends StatefulWidget {
+  const SearchScreen({super.key});
+
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
@@ -60,7 +62,7 @@ class _SearchScreenState extends State<SearchScreen> {
               Row(
                 children: [
                   IconButton(
-                    icon: Icon(Icons.arrow_back_ios_new),
+                    icon: const Icon(Icons.arrow_back_ios_new),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -111,7 +113,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               // Display "Search Course" when query is empty
               if (_searchController.text.isEmpty)
                 Expanded(
@@ -124,7 +126,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           width: 150,
                           height: 150,
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Text(
                           "Search Course",
                           style: GoogleFonts.poppins(

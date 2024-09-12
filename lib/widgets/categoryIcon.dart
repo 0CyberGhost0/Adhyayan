@@ -41,7 +41,7 @@ class CategoryIcon extends StatelessWidget {
             child: Image.asset(
               "assets/images/$title.png",
               fit: BoxFit
-                  .contain, // Use contain to ensure the image stays within the bounds
+                  .cover, // Use contain to ensure the image stays within the bounds
             ),
           ),
           const SizedBox(height: 8),

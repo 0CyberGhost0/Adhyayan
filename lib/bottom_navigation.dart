@@ -29,7 +29,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavBar(),
+      drawer: const NavBar(),
       backgroundColor: backGroundColor,
       body: Center(
         child: _getSelectedPage(_selectedIndex),
@@ -79,7 +79,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   Widget _getSelectedPage(int index) {
     switch (index) {
       case 0:
-        return HomePage(); // Replace with actual HomeScreen widget
+        return const HomePage(); // Replace with actual HomeScreen widget
       case 1:
         return const MyCoursePage(); // Replace with actual CourseScreen widget
       case 2:

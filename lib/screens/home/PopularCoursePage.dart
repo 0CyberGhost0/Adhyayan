@@ -28,7 +28,6 @@ class _PopularCourseScreenState extends State<PopularCourseScreen> {
         isLoading = false;
       });
     } catch (error) {
-      print('Failed to fetch popular courses: $error');
       setState(() {
         isLoading = false;
       });

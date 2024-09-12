@@ -42,18 +42,14 @@ class _MyCoursePageState extends State<MyCoursePage> {
       CourseServices courseServices = CourseServices();
       Course? course = await courseServices.getCourseById(courseId);
 
-      if (course != null) {
-        courseIdToLessonsCompleted[courseId] = enrolledCourse.completedLessonNo;
-      }
+      courseIdToLessonsCompleted[courseId] = enrolledCourse.completedLessonNo;
     }
 
     // Fetch all courses once and map them to lessons completed
     LinkedHashMap<Course, int> tempCourses = LinkedHashMap<Course, int>();
     for (var entry in courseIdToLessonsCompleted.entries) {
       Course? course = await CourseServices().getCourseById(entry.key);
-      if (course != null) {
-        tempCourses[course] = entry.value;
-      }
+      tempCourses[course] = entry.value;
     }
 
     setState(() {

@@ -12,7 +12,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
@@ -20,14 +20,14 @@ class _SplashScreenState extends State<SplashScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Your logo or any image here
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               // Dotted Circular Progress Indicator from flutter_spinkit
-              const SpinKitCircle(
+              SpinKitCircle(
                 color: buttonColour, // You can change the color as needed
                 size: 100.0, // Increase the size
               ),
-              const SizedBox(height: 20),
-              const Text(
+              SizedBox(height: 20),
+              Text(
                 'Loading...',
                 style: TextStyle(
                   fontSize: 22,

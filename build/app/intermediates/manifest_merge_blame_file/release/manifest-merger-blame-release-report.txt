@@ -1,0 +1,389 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.adhyayan"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+8-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml
+9        android:targetSdkVersion="34" />
+9-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:3:5-67
+11-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:3:22-64
+12    <!--
+13         Required to query activities that can process text, see:
+14         https://developer.android.com/training/package-visibility and
+15         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
+16
+17         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin.
+18    -->
+19    <queries>
+19-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:42:5-47:15
+20        <intent>
+20-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:43:9-46:18
+21            <action android:name="android.intent.action.PROCESS_TEXT" />
+21-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:44:13-72
+21-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:44:21-70
+22
+23            <data android:mimeType="text/plain" />
+23-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:45:13-50
+23-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:45:19-48
+24        </intent>
+25        <intent>
+25-->[:file_picker] /home/ved/adhyayan/build/file_picker/intermediates/merged_manifest/release/AndroidManifest.xml:14:9-18:18
+26            <action android:name="android.intent.action.GET_CONTENT" />
+26-->[:file_picker] /home/ved/adhyayan/build/file_picker/intermediates/merged_manifest/release/AndroidManifest.xml:15:13-72
+26-->[:file_picker] /home/ved/adhyayan/build/file_picker/intermediates/merged_manifest/release/AndroidManifest.xml:15:21-69
+27
+28            <data android:mimeType="*/*" />
+28-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:45:13-50
+28-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:45:19-48
+29        </intent>
+30        <intent>
+30-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:11:9-17:18
+31            <action android:name="android.intent.action.VIEW" />
+31-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:12:13-65
+31-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:12:21-62
+32
+33            <data
+33-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:45:13-50
+34                android:mimeType="*/*"
+34-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:45:19-48
+35                android:scheme="*" />
+36        </intent>
+37        <intent>
+37-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:18:9-27:18
+38            <action android:name="android.intent.action.VIEW" />
+38-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:12:13-65
+38-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:12:21-62
+39
+40            <category android:name="android.intent.category.BROWSABLE" />
+40-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:21:13-74
+40-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:21:23-71
+41
+42            <data
+42-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:45:13-50
+43                android:host="pay"
+44                android:mimeType="*/*"
+44-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:45:19-48
+45                android:scheme="upi" />
+46        </intent>
+47        <intent>
+47-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:28:9-30:18
+48            <action android:name="android.intent.action.MAIN" />
+48-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:27:17-68
+48-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:27:25-66
+49        </intent>
+50        <intent>
+50-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:31:9-35:18
+51            <action android:name="android.intent.action.SEND" />
+51-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:32:13-65
+51-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:32:21-62
+52
+53            <data android:mimeType="*/*" />
+53-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:45:13-50
+53-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:45:19-48
+54        </intent>
+55        <intent>
+55-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:36:9-38:18
+56            <action android:name="rzp.device_token.share" />
+56-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:37:13-61
+56-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:37:21-58
+57        </intent>
+58    </queries>
+59
+60    <uses-permission
+60-->[:file_picker] /home/ved/adhyayan/build/file_picker/intermediates/merged_manifest/release/AndroidManifest.xml:9:5-11:38
+61        android:name="android.permission.READ_EXTERNAL_STORAGE"
+61-->[:file_picker] /home/ved/adhyayan/build/file_picker/intermediates/merged_manifest/release/AndroidManifest.xml:10:9-64
+62        android:maxSdkVersion="32" /> <!-- Include required permissions for Google Maps API to run. -->
+62-->[:file_picker] /home/ved/adhyayan/build/file_picker/intermediates/merged_manifest/release/AndroidManifest.xml:11:9-35
+63    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+63-->[com.google.android.gms:play-services-maps:17.0.0] /home/ved/.gradle/caches/transforms-3/4162581ef5658880f650689e55b440eb/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:23:5-79
+63-->[com.google.android.gms:play-services-maps:17.0.0] /home/ved/.gradle/caches/transforms-3/4162581ef5658880f650689e55b440eb/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:23:22-76
+64
+65    <uses-feature
+65-->[com.google.android.gms:play-services-maps:17.0.0] /home/ved/.gradle/caches/transforms-3/4162581ef5658880f650689e55b440eb/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:26:5-28:35
+66        android:glEsVersion="0x00020000"
+66-->[com.google.android.gms:play-services-maps:17.0.0] /home/ved/.gradle/caches/transforms-3/4162581ef5658880f650689e55b440eb/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:27:9-41
+67        android:required="true" />
+67-->[com.google.android.gms:play-services-maps:17.0.0] /home/ved/.gradle/caches/transforms-3/4162581ef5658880f650689e55b440eb/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:28:9-32
+68
+69    <permission
+69-->[androidx.core:core:1.13.1] /home/ved/.gradle/caches/transforms-3/80e0d609fc443f4c0564917d219ce888/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
+70        android:name="com.example.adhyayan.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+70-->[androidx.core:core:1.13.1] /home/ved/.gradle/caches/transforms-3/80e0d609fc443f4c0564917d219ce888/transformed/core-1.13.1/AndroidManifest.xml:23:9-81
+71        android:protectionLevel="signature" />
+71-->[androidx.core:core:1.13.1] /home/ved/.gradle/caches/transforms-3/80e0d609fc443f4c0564917d219ce888/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
+72
+73    <uses-permission android:name="com.example.adhyayan.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+73-->[androidx.core:core:1.13.1] /home/ved/.gradle/caches/transforms-3/80e0d609fc443f4c0564917d219ce888/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
+73-->[androidx.core:core:1.13.1] /home/ved/.gradle/caches/transforms-3/80e0d609fc443f4c0564917d219ce888/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
+74
+75    <application
+76        android:name="android.app.Application"
+76-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:7:9-42
+77        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+77-->[androidx.core:core:1.13.1] /home/ved/.gradle/caches/transforms-3/80e0d609fc443f4c0564917d219ce888/transformed/core-1.13.1/AndroidManifest.xml:28:18-86
+78        android:icon="@mipmap/ic_launcher"
+78-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:8:9-43
+79        android:label="Adhyayan" >
+79-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:6:9-33
+80        <activity
+80-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:9:9-30:20
+81            android:name="com.example.adhyayan.MainActivity"
+81-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:10:13-41
+82            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+82-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:15:13-163
+83            android:exported="true"
+83-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:11:13-36
+84            android:hardwareAccelerated="true"
+84-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:16:13-47
+85            android:launchMode="singleTop"
+85-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:12:13-43
+86            android:taskAffinity=""
+86-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:13:13-36
+87            android:theme="@style/LaunchTheme"
+87-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:14:13-47
+88            android:windowSoftInputMode="adjustResize" >
+88-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:17:13-55
+89
+90            <!--
+91                 Specifies an Android theme to apply to this Activity as soon as
+92                 the Android process has started. This theme is visible to the user
+93                 while the Flutter UI initializes. After that, this theme continues
+94                 to determine the Window background behind the Flutter UI.
+95            -->
+96            <meta-data
+96-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:22:13-25:17
+97                android:name="io.flutter.embedding.android.NormalTheme"
+97-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:23:15-70
+98                android:resource="@style/NormalTheme" />
+98-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:24:15-52
+99
+100            <intent-filter>
+100-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:26:13-29:29
+101                <action android:name="android.intent.action.MAIN" />
+101-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:27:17-68
+101-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:27:25-66
+102
+103                <category android:name="android.intent.category.LAUNCHER" />
+103-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:28:17-76
+103-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:28:27-74
+104            </intent-filter>
+105        </activity>
+106        <!--
+107             Don't delete the meta-data below.
+108             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+109        -->
+110        <meta-data
+110-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:33:9-35:33
+111            android:name="flutterEmbedding"
+111-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:34:13-44
+112            android:value="2" />
+112-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:35:13-30
+113
+114        <provider
+114-->[:image_picker_android] /home/ved/adhyayan/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:11:9-19:20
+115            android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
+115-->[:image_picker_android] /home/ved/adhyayan/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:12:13-82
+116            android:authorities="com.example.adhyayan.flutter.image_provider"
+116-->[:image_picker_android] /home/ved/adhyayan/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:13:13-74
+117            android:exported="false"
+117-->[:image_picker_android] /home/ved/adhyayan/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:14:13-37
+118            android:grantUriPermissions="true" >
+118-->[:image_picker_android] /home/ved/adhyayan/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:15:13-47
+119            <meta-data
+119-->[:image_picker_android] /home/ved/adhyayan/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:16:13-18:75
+120                android:name="android.support.FILE_PROVIDER_PATHS"
+120-->[:image_picker_android] /home/ved/adhyayan/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:17:17-67
+121                android:resource="@xml/flutter_image_picker_file_paths" />
+121-->[:image_picker_android] /home/ved/adhyayan/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:18:17-72
+122        </provider> <!-- Trigger Google Play services to install the backported photo picker module. -->
+123        <service
+123-->[:image_picker_android] /home/ved/adhyayan/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:21:9-33:19
+124            android:name="com.google.android.gms.metadata.ModuleDependencies"
+124-->[:image_picker_android] /home/ved/adhyayan/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:22:13-78
+125            android:enabled="false"
+125-->[:image_picker_android] /home/ved/adhyayan/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:23:13-36
+126            android:exported="false" >
+126-->[:image_picker_android] /home/ved/adhyayan/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:24:13-37
+127            <intent-filter>
+127-->[:image_picker_android] /home/ved/adhyayan/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:26:13-28:29
+128                <action android:name="com.google.android.gms.metadata.MODULE_DEPENDENCIES" />
+128-->[:image_picker_android] /home/ved/adhyayan/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:27:17-94
+128-->[:image_picker_android] /home/ved/adhyayan/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:27:25-91
+129            </intent-filter>
+130
+131            <meta-data
+131-->[:image_picker_android] /home/ved/adhyayan/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:30:13-32:36
+132                android:name="photopicker_activity:0:required"
+132-->[:image_picker_android] /home/ved/adhyayan/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:31:17-63
+133                android:value="" />
+133-->[:image_picker_android] /home/ved/adhyayan/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:32:17-33
+134        </service>
+135
+136        <receiver
+136-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:42:9-49:20
+137            android:name="com.razorpay.RzpTokenReceiver"
+137-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:43:13-57
+138            android:exported="true" >
+138-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:44:13-36
+139            <intent-filter>
+139-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:46:13-48:29
+140                <action android:name="rzp.device_token.share" />
+140-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:37:13-61
+140-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:37:21-58
+141            </intent-filter>
+142        </receiver>
+143
+144        <activity
+144-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:51:9-59:20
+145            android:name="com.razorpay.CheckoutActivity"
+145-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:52:13-57
+146            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+146-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:53:13-83
+147            android:exported="false"
+147-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:54:13-37
+148            android:theme="@style/CheckoutTheme" >
+148-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:55:13-49
+149            <intent-filter>
+149-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:56:13-58:29
+150                <action android:name="android.intent.action.MAIN" />
+150-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:27:17-68
+150-->/home/ved/adhyayan/android/app/src/main/AndroidManifest.xml:27:25-66
+151            </intent-filter>
+152        </activity>
+153
+154        <meta-data
+154-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:61:9-63:58
+155            android:name="com.razorpay.plugin.googlepay_all"
+155-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:62:13-61
+156            android:value="com.razorpay.RzpGpayMerged" />
+156-->[com.razorpay:standard-core:1.6.40] /home/ved/.gradle/caches/transforms-3/e469be98bb633e8f7f0543714196a128/transformed/jetified-standard-core-1.6.40/AndroidManifest.xml:63:13-55
+157
+158        <activity
+158-->[com.google.android.gms:play-services-auth:21.1.0] /home/ved/.gradle/caches/transforms-3/e9c7a4a52ff5eab60377cf88814986a4/transformed/jetified-play-services-auth-21.1.0/AndroidManifest.xml:23:9-27:75
+159            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+159-->[com.google.android.gms:play-services-auth:21.1.0] /home/ved/.gradle/caches/transforms-3/e9c7a4a52ff5eab60377cf88814986a4/transformed/jetified-play-services-auth-21.1.0/AndroidManifest.xml:24:13-93
+160            android:excludeFromRecents="true"
+160-->[com.google.android.gms:play-services-auth:21.1.0] /home/ved/.gradle/caches/transforms-3/e9c7a4a52ff5eab60377cf88814986a4/transformed/jetified-play-services-auth-21.1.0/AndroidManifest.xml:25:13-46
+161            android:exported="false"
+161-->[com.google.android.gms:play-services-auth:21.1.0] /home/ved/.gradle/caches/transforms-3/e9c7a4a52ff5eab60377cf88814986a4/transformed/jetified-play-services-auth-21.1.0/AndroidManifest.xml:26:13-37
+162            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+162-->[com.google.android.gms:play-services-auth:21.1.0] /home/ved/.gradle/caches/transforms-3/e9c7a4a52ff5eab60377cf88814986a4/transformed/jetified-play-services-auth-21.1.0/AndroidManifest.xml:27:13-72
+163        <!--
+164            Service handling Google Sign-In user revocation. For apps that do not integrate with
+165            Google Sign-In, this service will never be started.
+166        -->
+167        <service
+167-->[com.google.android.gms:play-services-auth:21.1.0] /home/ved/.gradle/caches/transforms-3/e9c7a4a52ff5eab60377cf88814986a4/transformed/jetified-play-services-auth-21.1.0/AndroidManifest.xml:33:9-37:51
+168            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+168-->[com.google.android.gms:play-services-auth:21.1.0] /home/ved/.gradle/caches/transforms-3/e9c7a4a52ff5eab60377cf88814986a4/transformed/jetified-play-services-auth-21.1.0/AndroidManifest.xml:34:13-89
+169            android:exported="true"
+169-->[com.google.android.gms:play-services-auth:21.1.0] /home/ved/.gradle/caches/transforms-3/e9c7a4a52ff5eab60377cf88814986a4/transformed/jetified-play-services-auth-21.1.0/AndroidManifest.xml:35:13-36
+170            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
+170-->[com.google.android.gms:play-services-auth:21.1.0] /home/ved/.gradle/caches/transforms-3/e9c7a4a52ff5eab60377cf88814986a4/transformed/jetified-play-services-auth-21.1.0/AndroidManifest.xml:36:13-107
+171            android:visibleToInstantApps="true" /> <!-- Needs to be explicitly declared on P+ -->
+171-->[com.google.android.gms:play-services-auth:21.1.0] /home/ved/.gradle/caches/transforms-3/e9c7a4a52ff5eab60377cf88814986a4/transformed/jetified-play-services-auth-21.1.0/AndroidManifest.xml:37:13-48
+172        <uses-library
+172-->[com.google.android.gms:play-services-maps:17.0.0] /home/ved/.gradle/caches/transforms-3/4162581ef5658880f650689e55b440eb/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:33:9-35:40
+173            android:name="org.apache.http.legacy"
+173-->[com.google.android.gms:play-services-maps:17.0.0] /home/ved/.gradle/caches/transforms-3/4162581ef5658880f650689e55b440eb/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:34:13-50
+174            android:required="false" />
+174-->[com.google.android.gms:play-services-maps:17.0.0] /home/ved/.gradle/caches/transforms-3/4162581ef5658880f650689e55b440eb/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:35:13-37
+175
+176        <activity
+176-->[com.google.android.gms:play-services-base:18.3.0] /home/ved/.gradle/caches/transforms-3/9d6778f03a4700660dcab90d81b9e828/transformed/jetified-play-services-base-18.3.0/AndroidManifest.xml:20:9-22:45
+177            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+177-->[com.google.android.gms:play-services-base:18.3.0] /home/ved/.gradle/caches/transforms-3/9d6778f03a4700660dcab90d81b9e828/transformed/jetified-play-services-base-18.3.0/AndroidManifest.xml:20:19-85
+178            android:exported="false"
+178-->[com.google.android.gms:play-services-base:18.3.0] /home/ved/.gradle/caches/transforms-3/9d6778f03a4700660dcab90d81b9e828/transformed/jetified-play-services-base-18.3.0/AndroidManifest.xml:22:19-43
+179            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+179-->[com.google.android.gms:play-services-base:18.3.0] /home/ved/.gradle/caches/transforms-3/9d6778f03a4700660dcab90d81b9e828/transformed/jetified-play-services-base-18.3.0/AndroidManifest.xml:21:19-78
+180
+181        <meta-data
+181-->[com.google.android.gms:play-services-basement:18.3.0] /home/ved/.gradle/caches/transforms-3/116cce451517ccfc84933ae3da7037e3/transformed/jetified-play-services-basement-18.3.0/AndroidManifest.xml:21:9-23:69
+182            android:name="com.google.android.gms.version"
+182-->[com.google.android.gms:play-services-basement:18.3.0] /home/ved/.gradle/caches/transforms-3/116cce451517ccfc84933ae3da7037e3/transformed/jetified-play-services-basement-18.3.0/AndroidManifest.xml:22:13-58
+183            android:value="@integer/google_play_services_version" />
+183-->[com.google.android.gms:play-services-basement:18.3.0] /home/ved/.gradle/caches/transforms-3/116cce451517ccfc84933ae3da7037e3/transformed/jetified-play-services-basement-18.3.0/AndroidManifest.xml:23:13-66
+184
+185        <uses-library
+185-->[androidx.window:window:1.2.0] /home/ved/.gradle/caches/transforms-3/6c3fb20b89f9d6f1161211e6aae7463d/transformed/jetified-window-1.2.0/AndroidManifest.xml:23:9-25:40
+186            android:name="androidx.window.extensions"
+186-->[androidx.window:window:1.2.0] /home/ved/.gradle/caches/transforms-3/6c3fb20b89f9d6f1161211e6aae7463d/transformed/jetified-window-1.2.0/AndroidManifest.xml:24:13-54
+187            android:required="false" />
+187-->[androidx.window:window:1.2.0] /home/ved/.gradle/caches/transforms-3/6c3fb20b89f9d6f1161211e6aae7463d/transformed/jetified-window-1.2.0/AndroidManifest.xml:25:13-37
+188        <uses-library
+188-->[androidx.window:window:1.2.0] /home/ved/.gradle/caches/transforms-3/6c3fb20b89f9d6f1161211e6aae7463d/transformed/jetified-window-1.2.0/AndroidManifest.xml:26:9-28:40
+189            android:name="androidx.window.sidecar"
+189-->[androidx.window:window:1.2.0] /home/ved/.gradle/caches/transforms-3/6c3fb20b89f9d6f1161211e6aae7463d/transformed/jetified-window-1.2.0/AndroidManifest.xml:27:13-51
+190            android:required="false" />
+190-->[androidx.window:window:1.2.0] /home/ved/.gradle/caches/transforms-3/6c3fb20b89f9d6f1161211e6aae7463d/transformed/jetified-window-1.2.0/AndroidManifest.xml:28:13-37
+191
+192        <provider
+192-->[androidx.lifecycle:lifecycle-process:2.7.0] /home/ved/.gradle/caches/transforms-3/16dd45b3b0647ff8004d8d993a45fee7/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:24:9-32:20
+193            android:name="androidx.startup.InitializationProvider"
+193-->[androidx.lifecycle:lifecycle-process:2.7.0] /home/ved/.gradle/caches/transforms-3/16dd45b3b0647ff8004d8d993a45fee7/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:25:13-67
+194            android:authorities="com.example.adhyayan.androidx-startup"
+194-->[androidx.lifecycle:lifecycle-process:2.7.0] /home/ved/.gradle/caches/transforms-3/16dd45b3b0647ff8004d8d993a45fee7/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:26:13-68
+195            android:exported="false" >
+195-->[androidx.lifecycle:lifecycle-process:2.7.0] /home/ved/.gradle/caches/transforms-3/16dd45b3b0647ff8004d8d993a45fee7/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:27:13-37
+196            <meta-data
+196-->[androidx.lifecycle:lifecycle-process:2.7.0] /home/ved/.gradle/caches/transforms-3/16dd45b3b0647ff8004d8d993a45fee7/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:29:13-31:52
+197                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+197-->[androidx.lifecycle:lifecycle-process:2.7.0] /home/ved/.gradle/caches/transforms-3/16dd45b3b0647ff8004d8d993a45fee7/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:30:17-78
+198                android:value="androidx.startup" />
+198-->[androidx.lifecycle:lifecycle-process:2.7.0] /home/ved/.gradle/caches/transforms-3/16dd45b3b0647ff8004d8d993a45fee7/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:31:17-49
+199            <meta-data
+199-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ved/.gradle/caches/transforms-3/c47d07ec052b1fb0a34ac751827d68e0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:29:13-31:52
+200                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+200-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ved/.gradle/caches/transforms-3/c47d07ec052b1fb0a34ac751827d68e0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:30:17-85
+201                android:value="androidx.startup" />
+201-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ved/.gradle/caches/transforms-3/c47d07ec052b1fb0a34ac751827d68e0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:31:17-49
+202        </provider>
+203
+204        <receiver
+204-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ved/.gradle/caches/transforms-3/c47d07ec052b1fb0a34ac751827d68e0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:34:9-52:20
+205            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+205-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ved/.gradle/caches/transforms-3/c47d07ec052b1fb0a34ac751827d68e0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:35:13-76
+206            android:directBootAware="false"
+206-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ved/.gradle/caches/transforms-3/c47d07ec052b1fb0a34ac751827d68e0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:36:13-44
+207            android:enabled="true"
+207-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ved/.gradle/caches/transforms-3/c47d07ec052b1fb0a34ac751827d68e0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:37:13-35
+208            android:exported="true"
+208-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ved/.gradle/caches/transforms-3/c47d07ec052b1fb0a34ac751827d68e0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:38:13-36
+209            android:permission="android.permission.DUMP" >
+209-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ved/.gradle/caches/transforms-3/c47d07ec052b1fb0a34ac751827d68e0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:39:13-57
+210            <intent-filter>
+210-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ved/.gradle/caches/transforms-3/c47d07ec052b1fb0a34ac751827d68e0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:40:13-42:29
+211                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+211-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ved/.gradle/caches/transforms-3/c47d07ec052b1fb0a34ac751827d68e0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:41:17-91
+211-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ved/.gradle/caches/transforms-3/c47d07ec052b1fb0a34ac751827d68e0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:41:25-88
+212            </intent-filter>
+213            <intent-filter>
+213-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ved/.gradle/caches/transforms-3/c47d07ec052b1fb0a34ac751827d68e0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:43:13-45:29
+214                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+214-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ved/.gradle/caches/transforms-3/c47d07ec052b1fb0a34ac751827d68e0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:44:17-85
+214-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ved/.gradle/caches/transforms-3/c47d07ec052b1fb0a34ac751827d68e0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:44:25-82
+215            </intent-filter>
+216            <intent-filter>
+216-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ved/.gradle/caches/transforms-3/c47d07ec052b1fb0a34ac751827d68e0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:46:13-48:29
+217                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+217-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ved/.gradle/caches/transforms-3/c47d07ec052b1fb0a34ac751827d68e0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:47:17-88
+217-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ved/.gradle/caches/transforms-3/c47d07ec052b1fb0a34ac751827d68e0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:47:25-85
+218            </intent-filter>
+219            <intent-filter>
+219-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ved/.gradle/caches/transforms-3/c47d07ec052b1fb0a34ac751827d68e0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:49:13-51:29
+220                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+220-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ved/.gradle/caches/transforms-3/c47d07ec052b1fb0a34ac751827d68e0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:50:17-95
+220-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/ved/.gradle/caches/transforms-3/c47d07ec052b1fb0a34ac751827d68e0/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:50:25-92
+221            </intent-filter>
+222        </receiver>
+223    </application>
+224
+225</manifest>

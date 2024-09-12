@@ -91,7 +91,7 @@ class _CourseCardState extends State<CourseCard> {
                       borderRadius: BorderRadius.circular(12),
                       child: Image.network(
                         widget.course.thumbnailUrl,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.fill,
                         width: double.infinity,
                         height: 100,
                         loadingBuilder: (context, child, loadingProgress) {

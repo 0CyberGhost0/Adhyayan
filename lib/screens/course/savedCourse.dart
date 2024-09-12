@@ -45,9 +45,7 @@ class _SavedCourseState extends State<SavedCourse> {
       try {
         Course? course = await courseServices.getCourseById(courseId);
         fetchedCourses.add(course);
-      } catch (e) {
-        print('Failed to fetch course with ID $courseId: $e');
-      }
+      } catch (e) {}
     }
 
     if (!mounted) return; // Check if the widget is still mounted
@@ -80,9 +78,7 @@ class _SavedCourseState extends State<SavedCourse> {
           filteredCourses.removeWhere((course) => course.id == courseId);
         });
       }
-    } catch (e) {
-      print('Failed to unsave course with ID $courseId: $e');
-    }
+    } catch (e) {}
   }
 
   @override

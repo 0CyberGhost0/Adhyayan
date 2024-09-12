@@ -1,7 +1,6 @@
 import 'package:adhyayan/commons/color.dart';
 import 'package:adhyayan/screens/auth/forgotPassVerifyEmail.dart';
-import 'package:adhyayan/screens/auth/verify_email.dart';
-import 'package:adhyayan/services/AuthService.dart';
+
 import 'package:adhyayan/services/OTPServices.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -17,12 +16,12 @@ class ForgotPassword extends StatelessWidget {
       errorMaxLines: 3,
       prefixIconColor: TColors.darkGrey,
       suffixIconColor: TColors.darkGrey,
-      labelStyle: TextStyle(
+      labelStyle: const TextStyle(
         fontSize: TSizes.fontSizeMd,
         color: TColors.black,
         fontWeight: FontWeight.bold,
       ),
-      hintStyle: TextStyle(
+      hintStyle: const TextStyle(
         fontSize: TSizes.fontSizeSm,
         color: TColors.black,
       ),
@@ -62,7 +61,7 @@ class ForgotPassword extends StatelessWidget {
     return Scaffold(
       backgroundColor: backGroundColor,
       body: Padding(
-        padding: EdgeInsets.all(TSizes.defaultSpace).copyWith(top: 300),
+        padding: const EdgeInsets.all(TSizes.defaultSpace).copyWith(top: 300),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -72,13 +71,13 @@ class ForgotPassword extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
             ),
-            SizedBox(
+            const SizedBox(
               height: TSizes.spaceBtwItems,
             ),
-            Text(
+            const Text(
               "Don't worry sometimes people can forget too. Enter your email and we will send you a password reset link.",
             ),
-            SizedBox(
+            const SizedBox(
               height: TSizes.spaceBtwSections,
             ),
             TextFormField(
@@ -88,7 +87,7 @@ class ForgotPassword extends StatelessWidget {
               ),
               controller: emailController,
             ),
-            SizedBox(height: TSizes.spaceBtwSections),
+            const SizedBox(height: TSizes.spaceBtwSections),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -121,7 +120,7 @@ class ForgotPassword extends StatelessWidget {
                                 email: emailController.text)));
                   }
                 },
-                child: Text("Submit"),
+                child: const Text("Submit"),
               ),
             )
           ],

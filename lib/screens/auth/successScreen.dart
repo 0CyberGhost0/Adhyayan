@@ -30,17 +30,16 @@ class SuccessScreen extends StatelessWidget {
                     ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: TSizes.spaceBtwItems + 10),
-              Text(
+              const SizedBox(height: TSizes.spaceBtwItems + 10),
+              const Text(
                 "Congratulations! Your Account Awaits. Verify your Email \n to start Shopping and Experience a world of Unrivaled Deals and Personalized Offers",
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: TSizes.spaceBtwItems + 10),
+              const SizedBox(height: TSizes.spaceBtwItems + 10),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {},
-                  child: Text("Continue"),
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
                     foregroundColor: TColors.light,
@@ -58,9 +57,10 @@ class SuccessScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(TSizes.buttonRadius),
                     ),
                   ),
+                  child: const Text("Continue"),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: TSizes.spaceBtwSections,
               ),
             ],

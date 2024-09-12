@@ -1,7 +1,4 @@
 import 'dart:io';
-import 'dart:ui';
-
-import 'package:adhyayan/Data_Models/userModel.dart';
 import 'package:adhyayan/commons/utils.dart';
 import 'package:adhyayan/services/AuthService.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +13,7 @@ import '../../provider/userProvider.dart';
 import 'loginScreen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -36,7 +33,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final user = userProvider.user;
-    print("IMAGE URL : ${user.profilePictureUrl}");
     String profilePic = user.profilePictureUrl ??
         'https://res.cloudinary.com/dxa9xqx3t/image/upload/v1724310891/profileImage/jb2yekqpwv61rkh9wlpu.png'; // Fallback if null
 
@@ -86,7 +82,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       Provider.of<UserProvider>(context, listen: false).clearData();
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => LoginScreen()),
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
         (Route<dynamic> route) => false,
       );
     }
@@ -178,7 +174,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     keyboardType: TextInputType.phone,
                     decoration: customInputDecoration(
                       labelText: 'New Phone Number',
-                      prefixIcon: Icon(Icons.phone, color: TColors.darkGrey),
+                      prefixIcon:
+                          const Icon(Icons.phone, color: TColors.darkGrey),
                     ),
                   ),
                   const SizedBox(height: 15),
@@ -280,10 +277,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         backgroundColor: backGroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.black),
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
           onPressed: () => Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => BottomNavigation()),
+            MaterialPageRoute(builder: (context) => const BottomNavigation()),
             (Route<dynamic> route) => false,
           ),
         ),
@@ -314,11 +311,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     backgroundImage: NetworkImage(profilePic),
                   ),
                   if (_isUploadingProfilePic) // Show loading indicator only if uploading
-                    Positioned.fill(
+                    const Positioned.fill(
                       child: Align(
                         alignment: Alignment.center,
                         child:
-                            CircularProgressIndicator(), // Show loading indicator
+                            const CircularProgressIndicator(), // Show loading indicator
                       ),
                     ),
                   Positioned(
@@ -365,7 +362,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               label: 'Phone Number',
               value: user.phone,
               trailing: IconButton(
-                icon: Icon(Icons.edit, color: Colors.blue),
+                icon: const Icon(Icons.edit, color: Colors.blue),
                 onPressed: editPhoneNumber,
               ),
             ),
@@ -375,7 +372,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Center(
               child: ElevatedButton.icon(
                 onPressed: logoutUser,
-                icon: Icon(Icons.logout, color: Colors.white),
+                icon: const Icon(Icons.logout, color: Colors.white),
                 label: Text(
                   'Logout',
                   style: GoogleFonts.poppins(
@@ -424,7 +421,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             color: Colors.black.withOpacity(0.05),
             spreadRadius: 1,
             blurRadius: 10,
-            offset: Offset(0, 5),
+            offset: const Offset(0, 5),
           ),
         ],
       ),

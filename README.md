@@ -12,7 +12,7 @@ Adhyayan is a comprehensive course-selling and streaming platform built with Flu
 ## Screenshots
 
 ### Signup and Login
-| Signup Page | Login Page |
+| Login Page | SignUp Page |
 |-------------|------------|
 | ![Signup](https://github.com/user-attachments/assets/ea2498ae-faf8-446b-9e60-e9867a57ec24) | ![Login](https://github.com/user-attachments/assets/f283b290-fcba-40e6-a34e-deb6c3be0992) |
 
